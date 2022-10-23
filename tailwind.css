@@ -1,0 +1,4 @@
+@import '/fontawesome/css/all.min.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

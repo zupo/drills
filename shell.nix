@@ -10,7 +10,7 @@ in
 pkgs.mkShell {
   name = "dev-shell";
   buildInputs = [
-
+    pkgs.nodejs
   ];
 
 }
