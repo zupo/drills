@@ -2,7 +2,7 @@
   "name": "spellings",
   "scripts": {
     "postinstall": "elm-tooling install",
-    "start": "concurrently \"postcss --watch tailwind.css -o ./public/style.css\" \"elm-live src/Main.elm --dir=./public --hot --open -- --output=public/main.js\"",
+    "start": "concurrently \"postcss --watch tailwind.css -o ./public/style.css\" \"elm-live src/Main.elm --dir=./public --open -- --output=public/main.js\"",
     "build": "postcss tailwind.css -o ./public/style.css && elm make src/Main.elm --optimize --output=public/main.js"
   },
   "devDependencies": {
