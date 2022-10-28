@@ -3,13 +3,13 @@ module Main exposing (..)
 import Html exposing (p, text)
 import Html.Attributes exposing (class)
 
+import Array
+
 import Browser exposing (Document)
-import Html exposing (Html, Attribute, div, input, text)
+import Html exposing (Html, Attribute, button, div, input, text)
+import Html.Events exposing (onClick)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
-
---main =
---  p [ class "text-sm" ] [ text "Hello!"]
 
 main =
   Browser.document { init = init, update = update, subscriptions = subscriptions, view = view }
@@ -18,27 +18,36 @@ main =
 
 type alias Model =
   { actual : String,
-    expected : String
+    expected : Maybe String,
+    words: Array.Array String,
+    currentWordIndex: Int
   }
 
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  ({ actual = "", expected = "hello" }, Cmd.none)
+  (loadWord { actual = "", expected = Nothing, words = Array.fromList ["foo", "bar", "baz"] , currentWordIndex = 0}, Cmd.none)
+
+loadWord: Model -> Model
+loadWord model =
+  { model | expected = Array.get model.currentWordIndex model.words }
 
 
 -- UPDATE
 
 
 type Msg
-  = Change String
+  = KeyInput String
+  | ButtonNext
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Change newContent ->
+    KeyInput newContent ->
       ({ model | actual = newContent }, Cmd.none)
+    ButtonNext ->
+      ( loadWord { model | currentWordIndex = model.currentWordIndex+1} , Cmd.none)
 
 
 -- SUBSCRIPTIONS
@@ -58,16 +67,21 @@ view model =
     title = "Spellings",
     body = [
   div []
-    [ input [ placeholder "Start typing!", value model.actual, onInput Change, attribute "autofocus" ""] []
+    [ input [ placeholder "Start typing!", value model.actual, onInput KeyInput, attribute "autofocus" ""] []
     , viewValidation model ]
     ]
   }
 
 
-
-viewValidation : Model -> Html msg
+--(button [ onClick ButtonNext ] [ text "-" ])
+viewValidation : Model -> Html Msg
 viewValidation model =
-  if model.actual == model.expected then
-    div [ style "color" "green" ] [ text "OK" ]
-  else
-    div [ style "color" "red" ] [ text "Keep trying!" ]
+  case model.expected of
+    Just expected ->
+      if model.actual == expected then
+        div [ style "color" "green" ] [ text "OK", button [ onClick ButtonNext ] [text "next"] ]
+      else
+        div [ style "color" "red" ] [ text "Keep trying!" ]
+
+    Nothing ->
+      text "Initialization error: missing words"
