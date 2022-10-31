@@ -8,8 +8,15 @@
 </head>
 
 <body>
-  <div id="put-stuff-here">oh no, Elm didn't load</div>
-  <script>var app = Elm.Main.init({ node: document.getElementById('put-stuff-here') });</script>
+  <div id="elmapp">oh no, Elm didn't load</div>
+  <script>
+    var app = Elm.Main.init({ node: document.getElementById('elmapp') });
+
+    app.ports.say.subscribe(function(message) {
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(message));
+    });
+
+  </script>
 </body>
 
 </html>
