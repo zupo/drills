@@ -15,9 +15,16 @@ main =
 -- MODEL
 
 
+type State
+    = Welcome
+    | Playing
+    | Finished
+
+
 type alias Model =
-    { actual : String
-    , expected : String
+    { state : State
+    , actual : String
+    , expected : Maybe String
     , words : Array.Array String
     , currentWordIndex : Int
     }
@@ -25,12 +32,12 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( loadWord { actual = "", expected = "", words = Array.fromList [ "foo", "bar", "baz" ], currentWordIndex = 0 }, Cmd.none )
+    ( { state = Welcome, actual = "", expected = Nothing, words = Array.fromList [ "dog", "cat", "house " ], currentWordIndex = 0 }, Cmd.none )
 
 
 loadWord : Model -> Model
 loadWord model =
-    { model | expected = Maybe.withDefault "" (Array.get model.currentWordIndex model.words) }
+    { model | expected = Array.get model.currentWordIndex model.words }
 
 
 
@@ -56,11 +63,33 @@ update msg model =
             ( { model | actual = newContent }, Cmd.none )
 
         ButtonNext ->
-            let
-                updated_model =
-                    loadWord { model | currentWordIndex = model.currentWordIndex + 1, actual = "" }
-            in
-            ( updated_model, say updated_model.expected )
+            case model.state of
+                Welcome ->
+                    let
+                        updated_model =
+                            loadWord model
+                    in
+                    case updated_model.expected of
+                        Just expected ->
+                            ( { updated_model | state = Playing }, say expected )
+
+                        Nothing ->
+                            ( { model | state = Finished }, Cmd.none )
+
+                Playing ->
+                    let
+                        updated_model =
+                            loadWord { model | currentWordIndex = model.currentWordIndex + 1, actual = "" }
+                    in
+                    case updated_model.expected of
+                        Just expected ->
+                            ( updated_model, say expected )
+
+                        Nothing ->
+                            ( { model | state = Finished }, say "Well done!" )
+
+                Finished ->
+                    ( { model | currentWordIndex = 0, actual = "", expected = Nothing }, Cmd.none )
 
 
 
@@ -78,14 +107,39 @@ subscriptions model =
 
 view : Model -> Document Msg
 view model =
-    { title = "Spellings"
-    , body =
-        [ div []
-            [ input [ placeholder "Start typing!", value model.actual, onInput KeyInput, attribute "autofocus" "" ] []
-            , viewValidation model
-            ]
-        ]
-    }
+    let
+        title =
+            "Spellings"
+    in
+    case model.state of
+        Welcome ->
+            { title = title
+            , body =
+                [ div []
+                    [ text "welcome"
+                    , button [ onClick ButtonNext ] [ text "start" ]
+                    ]
+                ]
+            }
+
+        Playing ->
+            { title = title
+            , body =
+                [ div []
+                    [ input [ placeholder "Start typing!", value model.actual, onInput KeyInput, attribute "autofocus" "" ] []
+                    , viewValidation model
+                    ]
+                ]
+            }
+
+        Finished ->
+            { title = title
+            , body =
+                [ div []
+                    [ text "finished"
+                    ]
+                ]
+            }
 
 
 
@@ -94,8 +148,13 @@ view model =
 
 viewValidation : Model -> Html Msg
 viewValidation model =
-    if model.actual == model.expected then
-        div [ style "color" "green" ] [ text "OK", button [ onClick ButtonNext ] [ text "next" ] ]
+    case model.expected of
+        Just expected ->
+            if model.actual == expected then
+                div [ style "color" "green" ] [ text "OK", button [ onClick ButtonNext ] [ text "next" ] ]
 
-    else
-        div [ style "color" "red" ] [ text "Keep trying!" ]
+            else
+                div [ style "color" "red" ] [ text "Keep trying!" ]
+
+        Nothing ->
+            text "Initialization error: missing words"
