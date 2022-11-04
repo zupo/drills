@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Array
 import Browser exposing (Document)
-import Html exposing (Attribute, Html, button, div, input, p, text)
+import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 
@@ -32,7 +32,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { state = Welcome, actual = "", expected = Nothing, words = Array.fromList [ "dog", "cat", "house " ], currentWordIndex = 0 }, Cmd.none )
+    ( { state = Welcome, actual = "", expected = Nothing, words = Array.fromList [ "dog", "cat", "house" ], currentWordIndex = 0 }, Cmd.none )
 
 
 loadWord : Model -> Model
@@ -114,47 +114,98 @@ view model =
     case model.state of
         Welcome ->
             { title = title
-            , body =
-                [ div []
-                    [ text "welcome"
-                    , button [ onClick ButtonNext ] [ text "start" ]
-                    ]
-                ]
+            , body = [ welcomeBody ]
+
+            --[ div []
+            --    [ text "welcome"
+            --    , button [ onClick ButtonNext ] [ text "start" ]
+            --    ]
+            --]
             }
 
         Playing ->
             { title = title
-            , body =
-                [ div []
-                    [ input [ placeholder "Start typing!", value model.actual, onInput KeyInput, attribute "autofocus" "" ] []
-                    , viewValidation model
-                    ]
-                ]
+            , body = [ playingBody model ]
+
+            --[ div []
+            --    [ input [ placeholder "Start typing!", value model.actual, onInput KeyInput, attribute "autofocus" "" ] []
+            --    , viewValidation model
+            --    ]
+            --]
             }
 
         Finished ->
             { title = title
-            , body =
-                [ div []
-                    [ text "finished"
-                    ]
-                ]
+            , body = [ finishedBody ]
             }
 
 
+welcomeBody : Html Msg
+welcomeBody =
+    div [ class "flex flex-col justify-center items-center" ]
+        [ div [ class "py-12" ]
+            [ h2 [ class "text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl" ]
+                [ span [ class "block" ]
+                    [ text "Ready to practice spellings?" ]
+                , span [ class "block" ]
+                    [ text "Press start!" ]
+                ]
+            , div [ class "mt-8 flex justify-center" ]
+                [ div [ class "inline-flex rounded-md shadow" ]
+                    [ a [ class "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700" ]
+                        [ button [ onClick ButtonNext ] [ text "Start" ] ]
+                    ]
+                ]
+            ]
+        ]
 
---(button [ onClick ButtonNext ] [ text "-" ])
+
+playingBody : Model -> Html Msg
+playingBody model =
+    div [ class "flex flex-col justify-center items-center" ]
+        [ div [ class "mx-auto max-w-7xl py-12 px-4 text-center sm:px-6 lg:py-16 lg:px-8" ]
+            [ input
+                [ class "block rounded-full border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                , type_ "text"
+                , attribute "autofocus" ""
+                , placeholder "start typing"
+                , value model.actual
+                , onInput KeyInput
+                ]
+                []
+            , viewValidation model
+            ]
+        ]
+
+
+finishedBody =
+    div [ class "flex flex-col justify-center items-center" ]
+        [ div [ class "py-12" ]
+            [ h2 [ class "text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl" ]
+                [ span [ class "block" ]
+                    [ text "Finished!" ]
+                ]
+            ]
+        ]
 
 
 viewValidation : Model -> Html Msg
 viewValidation model =
     case model.expected of
         Just expected ->
-            if model.actual == expected then
-                div [ style "color" "green" ] [ text "OK", button [ onClick ButtonNext ] [ text "next" ] ]
+            if String.length model.actual < 3 then
+                div [] []
+
+            else if model.actual == expected then
+                div []
+                    [ h2 [ class "text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl py-4" ]
+                        [ text "Correct!" ]
+                    , a [ class "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-1 text-base font-medium text-white hover:bg-indigo-700" ]
+                        [ button [ onClick ButtonNext ] [ text "Next word" ] ]
+                    ]
 
             else
-                div [ style "color" "red" ] [ text "Keep trying!" ]
+                div [ style "color" "orange" ] [ text "Keep trying!" ]
 
         Nothing ->
             text "Initialization error: missing words"
