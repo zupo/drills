@@ -53,6 +53,7 @@ port say : String -> Cmd msg
 
 type Msg
     = KeyInput String
+    | ButtonRepeat
     | ButtonNext
 
 
@@ -61,6 +62,9 @@ update msg model =
     case msg of
         KeyInput newContent ->
             ( { model | actual = newContent }, Cmd.none )
+
+        ButtonRepeat ->
+            ( model, Maybe.withDefault "" model.expected |> say )
 
         ButtonNext ->
             case model.state of
@@ -115,23 +119,11 @@ view model =
         Welcome ->
             { title = title
             , body = [ welcomeBody ]
-
-            --[ div []
-            --    [ text "welcome"
-            --    , button [ onClick ButtonNext ] [ text "start" ]
-            --    ]
-            --]
             }
 
         Playing ->
             { title = title
             , body = [ playingBody model ]
-
-            --[ div []
-            --    [ input [ placeholder "Start typing!", value model.actual, onInput KeyInput, attribute "autofocus" "" ] []
-            --    , viewValidation model
-            --    ]
-            --]
             }
 
         Finished ->
@@ -173,6 +165,7 @@ playingBody model =
                 , onInput KeyInput
                 ]
                 []
+            , button [ class "py-3", onClick ButtonRepeat ] [ text "📢" ]
             , viewValidation model
             ]
         ]
