@@ -2,10 +2,12 @@ port module Main exposing (..)
 
 import Array
 import Browser exposing (Document)
+import Browser.Dom as Dom
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Random exposing (..)
+import Task
 
 
 main =
@@ -103,6 +105,7 @@ type Msg
     | ButtonRepeat
     | ButtonNext
     | RandomNumber Int
+    | Focus (Result Dom.Error ())
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -110,6 +113,9 @@ update msg model =
     case msg of
         RandomNumber x ->
             ( { model | gifs_random_index = x - 1 }, Cmd.none )
+
+        Focus _ ->
+            ( model, Cmd.none )
 
         KeyInput newContent ->
             ( { model | actual = newContent }, Cmd.none )
@@ -126,7 +132,7 @@ update msg model =
                     in
                     case updated_model.expected of
                         Just expected ->
-                            ( { updated_model | state = Playing }, say expected )
+                            ( { updated_model | state = Playing }, Cmd.batch [ say expected, focus "actual" ] )
 
                         Nothing ->
                             ( { model | state = Finished }, Cmd.none )
@@ -138,7 +144,7 @@ update msg model =
                     in
                     case updated_model.expected of
                         Just expected ->
-                            ( updated_model, say expected )
+                            ( updated_model, Cmd.batch [ say expected, focus "actual" ] )
 
                         Nothing ->
                             ( { model | state = Finished }, say "Well done!" )
@@ -150,6 +156,11 @@ update msg model =
 oneToX : Int -> Random.Generator Int
 oneToX x =
     Random.int 1 x
+
+
+focus : String -> Cmd Msg
+focus id =
+    Dom.focus id |> Task.attempt Focus
 
 
 
@@ -219,7 +230,7 @@ contentPlaying model =
             [ input
                 [ class "block rounded-full border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 , type_ "text"
-                , attribute "autofocus" ""
+                , id "actual"
                 , placeholder "start typing"
                 , value model.actual
                 , onInput KeyInput
