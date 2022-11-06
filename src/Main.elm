@@ -203,7 +203,7 @@ contentPlaying model =
         Just expected ->
             let
                 visible =
-                    if model.actual == expected then
+                    if String.toLower model.actual == expected then
                         "visible"
 
                     else
@@ -253,28 +253,3 @@ contentFinished model =
         ]
         []
     ]
-
-
-viewValidation : Model -> Html Msg
-viewValidation model =
-    case model.expected of
-        Just expected ->
-            if String.length model.actual < 3 then
-                div [] []
-
-            else if model.actual == expected then
-                div []
-                    [ div []
-                        [ h2 [ class "text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl py-4" ]
-                            [ text "Correct!" ]
-                        , a [ class "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-1 text-base font-medium text-white hover:bg-indigo-700" ]
-                            [ button [ onClick ButtonNext ] [ text "Next word" ] ]
-                        ]
-                    , img [ src ("https://cataas.com/cat/says/" ++ expected), class "h-1" ] []
-                    ]
-
-            else
-                div [ style "color" "orange" ] [ text "Keep trying!" ]
-
-        Nothing ->
-            text "Initialization error: missing words"
