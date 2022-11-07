@@ -208,8 +208,8 @@ contentWelcome model =
         ]
     , div [ class "mt-8 flex justify-center" ]
         [ div [ class "inline-flex rounded-md shadow" ]
-            [ a [ class "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700" ]
-                [ button [ onClick ButtonNext ] [ text "Start" ] ]
+            [ a [ class "rounded-md border border-transparent bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700" ]
+                [ button [ onClick ButtonNext, class "px-5 py-3" ] [ text "Start" ] ]
             ]
         ]
     ]
@@ -243,10 +243,10 @@ contentPlaying model =
                 ]
                 [ text "Correct!" ]
             , a
-                [ class "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-1 text-base font-medium text-white hover:bg-indigo-700"
+                [ class "rounded-md border border-transparent bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700"
                 , class visible
                 ]
-                [ button [ onClick ButtonNext ] [ text "Next word" ] ]
+                [ button [ onClick ButtonNext, class "px-5 py-1" ] [ text "Next word" ] ]
             , img
                 [ src ("https://cataas.com/cat/says/" ++ expected)
                 , class "py-4 h-1/2"
