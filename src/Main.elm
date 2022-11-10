@@ -15,16 +15,16 @@ main =
 
 
 words =
-    [ "sail"
-    , "tail"
-    , "pain"
-    , "paint"
-    , "snail"
-    , "brain"
-    , "explain"
-    , "complain"
-    , "was"
-    , "they"
+    [ "surf"
+    , "burn"
+    , "burger"
+    , "purple"
+    , "nurse"
+    , "picture"
+    , "measure"
+    , "surprise"
+    , "are"
+    , "all"
     ]
 
 
