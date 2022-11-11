@@ -118,7 +118,7 @@ update msg model =
             ( model, Cmd.none )
 
         KeyInput newContent ->
-            ( { model | actual = newContent }, Cmd.none )
+            ( { model | actual = newContent |> String.trim }, Cmd.none )
 
         ButtonRepeat ->
             ( model, Maybe.withDefault "" model.expected |> say )
