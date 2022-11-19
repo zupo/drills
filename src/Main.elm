@@ -15,16 +15,16 @@ main =
 
 
 words =
-    [ "surf"
-    , "burn"
-    , "burger"
-    , "purple"
-    , "nurse"
-    , "picture"
-    , "measure"
-    , "surprise"
-    , "are"
-    , "all"
+    [ "dear"
+    , "hear"
+    , "beard"
+    , "near"
+    , "year"
+    , "clear"
+    , "fear"
+    , "appear"
+    , "he"
+    , "her"
     ]
 
 
