@@ -15,16 +15,16 @@ main =
 
 
 words =
-    [ "dear"
-    , "hear"
-    , "beard"
-    , "near"
-    , "year"
-    , "clear"
-    , "fear"
-    , "appear"
-    , "he"
-    , "her"
+    [ "air"
+    , "fair"
+    , "dairy"
+    , "hair"
+    , "pain"
+    , "chair"
+    , "fairy"
+    , "stairs"
+    , "she"
+    , "we"
     ]
 
 
