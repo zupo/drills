@@ -19,7 +19,7 @@ words =
     , "fair"
     , "dairy"
     , "hair"
-    , "pain"
+    , "pair"
     , "chair"
     , "fairy"
     , "stairs"
