@@ -15,16 +15,16 @@ main =
 
 
 words =
-    [ "air"
-    , "fair"
-    , "dairy"
-    , "hair"
-    , "pair"
-    , "chair"
-    , "fairy"
-    , "stairs"
-    , "she"
-    , "we"
+    [ "pure"
+    , "cure"
+    , "lure"
+    , "sure"
+    , "mature"
+    , "vulture"
+    , "secure"
+    , "manure"
+    , "be"
+    , "me"
     ]
 
 
