@@ -15,16 +15,16 @@ main =
 
 
 words =
-    [ "pure"
-    , "cure"
-    , "lure"
-    , "sure"
-    , "mature"
-    , "vulture"
-    , "secure"
-    , "manure"
-    , "be"
-    , "me"
+    [ "knock"
+    , "know"
+    , "knee"
+    , "knit"
+    , "knife"
+    , "gnat"
+    , "gnaw"
+    , "gnome"
+    , "said"
+    , "have"
     ]
 
 
