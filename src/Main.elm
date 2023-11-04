@@ -15,16 +15,14 @@ main =
 
 
 words =
-    [ "knock"
-    , "know"
-    , "knee"
-    , "knit"
-    , "knife"
-    , "gnat"
-    , "gnaw"
-    , "gnome"
-    , "said"
-    , "have"
+    [ "jam"
+    , "jet"
+    , "jug"
+    , "job"
+    , "jog"
+    , "I"
+    , "The"
+    , "go"
     ]
 
 
