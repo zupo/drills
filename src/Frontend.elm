@@ -36,7 +36,7 @@ whereAreWe =
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     ( { key = key
-      , message = whereAreWe
+      , message = whereAreWe ++ Env.dummyConfigItem
       }
     , Cmd.none
     )
