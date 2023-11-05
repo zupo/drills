@@ -36,7 +36,8 @@ whereAreWe =
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     ( { key = key
-      , message = whereAreWe ++ Env.dummyConfigItem
+      , message = whereAreWe
+      , secret = Env.dummyConfigItem
       }
     , Cmd.none
     )
@@ -81,7 +82,7 @@ view model =
                 [ Attr.style "font-family" "sans-serif"
                 , Attr.style "padding-top" "40px"
                 ]
-                [ Html.text model.message ]
+                [ Html.text model.message, Html.text " secret: ", Html.text model.secret ]
             ]
         ]
     }

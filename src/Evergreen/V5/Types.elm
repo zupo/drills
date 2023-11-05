@@ -1,14 +1,14 @@
-module Types exposing (..)
+module Evergreen.V5.Types exposing (..)
 
-import Browser exposing (UrlRequest)
-import Browser.Navigation exposing (Key)
-import Url exposing (Url)
+import Browser
+import Browser.Navigation
+import Url
 
 
 type alias FrontendModel =
-    { key : Key
+    { key : Browser.Navigation.Key
     , message : String
-    , secret: String
+    , secret : String
     }
 
 
@@ -18,8 +18,8 @@ type alias BackendModel =
 
 
 type FrontendMsg
-    = UrlClicked UrlRequest
-    | UrlChanged Url
+    = UrlClicked Browser.UrlRequest
+    | UrlChanged Url.Url
     | NoOpFrontendMsg
 
 
