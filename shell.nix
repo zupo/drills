@@ -1,11 +1,14 @@
-let
-  nixpkgs = builtins.fetchTarball {
-    # https://status.nixos.org/ -> nixos-23.05 on 2023-10-04
-    url = "https://github.com/nixos/nixpkgs/archive/621f51253edffa1d6f08d5fce4f08614c852d17e.tar.gz";
-  };
-  pkgs = import nixpkgs {};
+# let
+#   # point to a lokal nixpkgs checkout in ~/work/nixpkgs
+#   nixpkgs = builtins.fetchTarball {
+#     # https://status.nixos.org/ -> nixos-23.05 on 2023-10-04
+#     url = "https://github.com/zupo/nixpkgs/archive/044e50b331310361b26829e2f5bb8b787d1c7aeb.tar.gz";
+#   };
+#   pkgs = import nixpkgs {};
 
-in
+# in
+
+{ pkgs ? import /Users/zupo/work/nixpkgs {} }:
 
 pkgs.mkShell {
   name = "dev-shell";
@@ -14,6 +17,7 @@ pkgs.mkShell {
     pkgs.elmPackages.elm-review
     pkgs.elmPackages.elm-test
     pkgs.elmPackages.elm-format
+    # pkgs.elmPackages.elm-land
   ];
 
 }
