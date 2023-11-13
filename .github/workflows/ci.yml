@@ -1,0 +1,67 @@
+# Run all tests, linters, code analysis and other QA tasks on
+# every push to main and PRs.
+
+# 1. Create a new SSH key
+# 2. Add the public key to https://dashboard.lamdera.app/account/sshkeys
+# 3. Add the private key as SSH_KEY in the repository secrets
+# 4. Add the contents of ~/.elm/.lamdera-cli as LAMDERA_TOKEN in the repository secrets
+
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci: 
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install Lamdera
+      env:
+        LAMDERA_TOKEN: ${{ secrets.LAMDERA_TOKEN }}
+
+      run: |
+        curl https://static.lamdera.com/bin/lamdera-1.2.1-linux-x86_64 -o /usr/local/bin/lamdera
+        chmod a+x /usr/local/bin/lamdera
+        git remote add lamdera git@apps.lamdera.com:spellings.git
+        mkdir -p ~/.elm && echo -n $LAMDERA_TOKEN >> ~/.elm/.lamdera-cli
+
+    - name: Build CSS
+      run: | 
+        npm install 
+        npm run build:css
+
+    - name: Verify deployment
+      run: lamdera check
+
+    - uses: tj-actions/verify-changed-files@v14
+      id: verify-changed-files
+      with:
+          files: ${{ inputs.files }}
+
+    - name: Fail if there are uncommitted files
+      if: steps.verify-changed-files.outputs.files_changed == 'true'
+      run: |
+        echo "::error title=🔴 Changed files:: ${{ steps.verify-changed-files.outputs.changed_files }}"
+        git diff
+        exit 1
+
+    - name: Install SSH key for deployment
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: unnecessary
+        
+    - name: Ship it! 🚢
+      run: |
+        git fetch --unshallow
+        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push --force git@apps.lamdera.com:spellings.git main
