@@ -28,7 +28,9 @@ $ lamdera live
 
 ## Deployment
 
-TODO: Auto-deployed on each commit to `main` to https://spellings.lamdera.app/.
+Each commit to `main` is auto-deployed to https://spellings.lamdera.app/.
+
+Each Pull Request gets a preview app at https://spellings-<BRANCH_NAME>.lamdera.app/.
 
 
 ## Troubleshooting

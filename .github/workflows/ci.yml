@@ -58,6 +58,9 @@ jobs:
         known_hosts: unnecessary
         
     - name: Ship it! 🚢
+      env:
+        BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
       run: |
         git fetch --unshallow
-        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push --force git@apps.lamdera.com:spellings.git main
+        # yes | lamdera deploy
+        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push --force lamdera HEAD:$BRANCH_NAME
