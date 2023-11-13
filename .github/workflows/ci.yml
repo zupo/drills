@@ -33,15 +33,11 @@ jobs:
         curl https://static.lamdera.com/bin/lamdera-1.2.1-linux-x86_64 -o /usr/local/bin/lamdera
         chmod a+x /usr/local/bin/lamdera
         git remote add lamdera git@apps.lamdera.com:spellings.git
-        mkdir -p ~/.elm && echo -n $LAMDERA_TOKEN >> ~/.elm/.lamdera-cli
 
     - name: Build CSS
       run: | 
         npm install 
         npm run build:css
-
-    - name: Verify deployment
-      run: lamdera check
 
     - uses: tj-actions/verify-changed-files@v14
       id: verify-changed-files
