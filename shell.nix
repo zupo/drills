@@ -1,7 +1,7 @@
 let
   nixpkgs = builtins.fetchTarball {
-    # https://status.nixos.org/ -> nixos-22.05 on 2022-10-23
-    url = "https://github.com/nixos/nixpkgs/archive/3933d8bb9120573c0d8d49dc5e890cb211681490.tar.gz";
+    # https://status.nixos.org/ -> nixpkgs-unstable on 2023-11-13
+    url = "https://github.com/nixos/nixpkgs/archive/911ad1e67f458b6bcf0278fa85e33bb9924fed7e.tar.gz";
   };
   pkgs = import nixpkgs {};
 
@@ -10,7 +10,10 @@ in
 pkgs.mkShell {
   name = "dev-shell";
   buildInputs = [
-    pkgs.nodejs
+    pkgs.elmPackages.lamdera
+    pkgs.elmPackages.elm-review
+    pkgs.elmPackages.elm-test
+    pkgs.elmPackages.elm-format
   ];
 
 }
