@@ -7,11 +7,11 @@ A simple Elm app to train word spellings.
 * You need nix and direnv.
 * cd spellings
 * npm install
-* npm run start  # local dev (tailwind and elm-live server)
-* npm run build  # build the CSS/HTML/JS files in public/ folder
+* npm run build:css -- --watch
+* lamdera live
 
 
-Auto-deployed on each commit to `main` to https://spellings.netlify.app/.
+TODO: Auto-deployed on each commit to `main` to https://spellings.lamdera.app/.
 
 
 ## Troubleshooting
@@ -19,4 +19,4 @@ Auto-deployed on each commit to `main` to https://spellings.netlify.app/.
 
 ### Something is wrong with commands in `package.json` and I need to run them manually.
 
-You need to prepend them with `npx`. For example, `npx elm make`.
+You may need to prepend them with `npx`. For example, `npx elm make`.

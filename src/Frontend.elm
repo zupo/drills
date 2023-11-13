@@ -228,7 +228,13 @@ subscriptions model =
 view : FrontendModel -> Browser.Document FrontendMsg
 view model =
     { title = "Spellings"
-    , body = [ Html.div [ Attr.style "text-align" "center", Attr.style "padding-top" "40px" ]
+    , body = 
+
+        -- css
+        [ Html.node "link" [ rel "stylesheet", href "/output.css" ] []
+            ]
+        ++    
+            [ Html.div [ class "w-screen h-screen flex flex-col items-center pt-16 pb-4 space-y-12 bg-base-100 overflow-y-auto text-base-content", Attr.style "text-align" "center", Attr.style "padding-top" "40px" ]
             [ Html.img [ Attr.src "https://lamdera.app/lamdera-logo-black.png", Attr.width 150 ] []
             , Html.div
                 [ Attr.style "font-family" "sans-serif"

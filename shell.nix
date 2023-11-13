@@ -10,6 +10,7 @@ in
 pkgs.mkShell {
   name = "dev-shell";
   buildInputs = [
+    pkgs.nodejs
     pkgs.elmPackages.lamdera
     pkgs.elmPackages.elm-review
     pkgs.elmPackages.elm-test
