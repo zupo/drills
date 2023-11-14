@@ -1,8 +1,7 @@
-module Evergreen.V1.Types exposing (..)
+module Evergreen.V1.Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg(..), ToBackend(..), ToFrontend(..))
 
 import Browser
 import Browser.Navigation
-import Url
 
 
 type alias FrontendModel =
@@ -18,8 +17,6 @@ type alias BackendModel =
 
 type FrontendMsg
     = UrlClicked Browser.UrlRequest
-    | UrlChanged Url.Url
-    | NoOpFrontendMsg
 
 
 type ToBackend

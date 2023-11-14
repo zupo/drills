@@ -1,7 +1,7 @@
-module Tests exposing (..)
+module Tests exposing (suite)
 
-import Expect exposing (..)
-import Test exposing (..)
+import Expect exposing (equal)
+import Test exposing (Test, test)
 
 
 suite : Test
