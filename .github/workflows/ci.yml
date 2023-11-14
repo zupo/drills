@@ -21,6 +21,9 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+        
     - uses: actions/setup-node@v4
       with:
         node-version: 18
@@ -61,6 +64,4 @@ jobs:
       env:
         BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
       run: |
-        git fetch --unshallow
-        # yes | lamdera deploy
         GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push --force lamdera HEAD:$BRANCH_NAME
