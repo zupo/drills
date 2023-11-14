@@ -51,6 +51,11 @@ jobs:
         npm install 
         npm run build:css
 
+    - name: Run tests
+      run: |
+        lamdera make || true 
+        npx elm-test-rs --compiler `which lamdera`
+
     - uses: tj-actions/verify-changed-files@v14
       id: verify-changed-files
       with:
