@@ -1,0 +1,45 @@
+minimum_pre_commit_version: 3.3.0
+default_stages: [commit]
+repos:
+
+  - repo: local
+    hooks:
+
+      - id: trailing-whitespace
+        name: Trim Trailing Space
+        entry: trailing-whitespace-fixer
+        language: system
+        types: [file, text]
+
+      - id: end-of-file-fixer
+        name: Fix End of Files
+        description: Ensures that a file is either empty, or ends with one newline.
+        entry: end-of-file-fixer
+        language: system
+        exclude: >
+            (?x)^(
+                public/.*|
+            )$
+        types: [file, text]
+
+      - id: check-merge-conflict
+        name: Check for merge conflicts
+        description: Check for files that contain merge conflict strings.
+        entry: check-merge-conflict
+        language: system
+        types: [file, text]
+
+      - id: yamllint
+        name: yamllint
+        description: Lint YAML files.
+        entry: yamllint
+        language: system
+        types: [yaml]
+
+      - id: elm-format
+        name: Elm Format
+        description: Format Elm source code
+        entry: elm-format --yes
+        language: system
+        files: ^.*\.elm
+        types: [file]
