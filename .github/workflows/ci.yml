@@ -1,5 +1,6 @@
 # Run all tests, linters, code analysis and other QA tasks on
 # every push to main and PRs.
+# Deploy PRs as preview apps, deploy main to prod.
 
 # 1. Create a new SSH key
 # 2. Add the public key to https://dashboard.lamdera.app/account/sshkeys
@@ -16,11 +17,21 @@ on:
       - main
 
 jobs:
-  ci: 
+  CI: 
     runs-on: ubuntu-latest
     steps:
 
     - uses: actions/checkout@v4
+      if: github.event_name == 'pull_request'
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        fetch-depth: 0
+
+    - uses: actions/checkout@v4
+      if: github.event_name != 'pull_request'
+      with:
+        fetch-depth: 0
+
     - uses: actions/setup-node@v4
       with:
         node-version: 18
@@ -28,11 +39,12 @@ jobs:
     - name: Install Lamdera
       env:
         LAMDERA_TOKEN: ${{ secrets.LAMDERA_TOKEN }}
-
       run: |
         curl https://static.lamdera.com/bin/lamdera-1.2.1-linux-x86_64 -o /usr/local/bin/lamdera
         chmod a+x /usr/local/bin/lamdera
+        mkdir ~/.ssh && ssh-keyscan apps.lamdera.com >> ~/.ssh/known_hosts
         git remote add lamdera git@apps.lamdera.com:spellings.git
+        mkdir -p ~/.elm && echo -n $LAMDERA_TOKEN >> ~/.elm/.lamdera-cli
 
     - name: Build CSS
       run: | 
@@ -55,12 +67,19 @@ jobs:
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.SSH_KEY }}
-        known_hosts: unnecessary
-        
-    - name: Ship it! 🚢
-      env:
-        BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+        known_hosts: "already added in Install Lamdera step"
+
+    - name: Deploy
       run: |
-        git fetch --unshallow
-        # yes | lamdera deploy
-        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push --force lamdera HEAD:$BRANCH_NAME
+        yes | lamdera deploy
+
+    # On `main`, `lamdera deploy` will run `lamdera check` automatically.
+    # However, not on branches, so we need to run it manually. But `lamdera check`
+    # expects to be run from `main` or `master` branch, so we need to trick it.
+    # Since this repo uses `main`, we can checkout from current branch into
+    # `master` and master will get all changes from the current branch. 
+    - name: Lamdera check
+      if: github.event_name == 'pull_request'
+      run: |
+        git checkout -b master
+        lamdera check
