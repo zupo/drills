@@ -28,7 +28,6 @@ jobs:
     - name: Install Lamdera
       env:
         LAMDERA_TOKEN: ${{ secrets.LAMDERA_TOKEN }}
-
       run: |
         curl https://static.lamdera.com/bin/lamdera-1.2.1-linux-x86_64 -o /usr/local/bin/lamdera
         chmod a+x /usr/local/bin/lamdera
@@ -38,6 +37,11 @@ jobs:
       run: | 
         npm install 
         npm run build:css
+
+    - name: Run tests
+      run: |
+        lamdera make || true 
+        npx elm-test-rs --compiler `which lamdera`
 
     - uses: tj-actions/verify-changed-files@v14
       id: verify-changed-files

@@ -13,7 +13,6 @@ pkgs.mkShell {
     pkgs.nodejs
     pkgs.elmPackages.lamdera
     pkgs.elmPackages.elm-review
-    pkgs.elmPackages.elm-test
     pkgs.elmPackages.elm-format
   ];
 

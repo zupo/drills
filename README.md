@@ -24,6 +24,7 @@ $ lamdera live
 
 * Auto-reload CSS changes: `npm run build:css -- --watch`
 * Verify deployment: `lamdera check`
+* Run tests: `` npx elm-test-rs --compiler `which lamdera` ``
 * CI: https://github.com/zupo/spellings/actions/workflows/ci.yml
 
 ## Deployment
