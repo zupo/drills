@@ -5,7 +5,6 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.2",
-    "elm-analyse": "^0.16.5",
     "elm-test-rs": "^3.0.0-5",
     "tailwindcss": "^3.1.6"
   }
