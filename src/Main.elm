@@ -15,14 +15,16 @@ main =
 
 
 words =
-    [ "jam"
-    , "jet"
-    , "jug"
-    , "job"
-    , "jog"
-    , "I"
-    , "The"
-    , "go"
+    [ "very"
+    , "happy"
+    , "funny"
+    , "party"
+    , "family"
+    , "sunny"
+    , "smelly"
+    , "jolly"
+    , "dizzy"
+    , "silly"
     ]
 
 
