@@ -15,16 +15,16 @@ main =
 
 
 words =
-    [ "very"
-    , "happy"
-    , "funny"
-    , "party"
-    , "family"
-    , "sunny"
-    , "smelly"
-    , "jolly"
-    , "dizzy"
-    , "silly"
+    [ "short"
+    , "born"
+    , "horse"
+    , "more"
+    , "before"
+    , "morning"
+    , "score"
+    , "door"
+    , "wore"
+    , "shore"
     ]
 
 
