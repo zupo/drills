@@ -20,7 +20,7 @@ app =
         { init = init
         , update = update
         , updateFromFrontend = updateFromFrontend
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = \_ -> Lamdera.onConnect OnConnect
         }
 
 
@@ -32,8 +32,8 @@ init =
 update : BackendMsg -> Model -> ( Model, Cmd BackendMsg )
 update msg model =
     case msg of
-        NoOpBackendMsg ->
-            ( model, Cmd.none )
+        OnConnect _ cid ->
+            ( model, Lamdera.sendToFrontend cid <| NewSmashedLikes model.smashedLikes )
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )

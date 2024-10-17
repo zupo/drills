@@ -1,6 +1,7 @@
 module Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg, ToBackend, ToFrontend(..))
 
 import Bridge
+import Lamdera exposing (ClientId, SessionId)
 import Main as ElmLand
 
 
@@ -22,7 +23,7 @@ type alias ToBackend =
 
 
 type BackendMsg
-    = NoOpBackendMsg
+    = OnConnect SessionId ClientId
 
 
 type ToFrontend
