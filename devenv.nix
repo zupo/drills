@@ -4,6 +4,14 @@ let
 in
 {
   packages = [
+    pkgs.which
+    pkgs.elmPackages.lamdera
     pkgs-unstable.elmPackages.elm-test-rs
+    pkgs.nodejs
   ];
+
+  enterTest = ''
+    elm-test-rs --compiler $(which lamdera)
+  '';
+
 }
