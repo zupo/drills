@@ -1,7 +1,8 @@
 module Backend exposing (Model, app)
 
+import Bridge exposing (ToBackend(..))
 import Lamdera exposing (ClientId, SessionId)
-import Types exposing (BackendModel, BackendMsg(..), ToBackend(..))
+import Types exposing (BackendModel, BackendMsg(..))
 
 
 type alias Model =
@@ -38,5 +39,5 @@ update msg model =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend _ _ msg model =
     case msg of
-        NoOpToBackend ->
+        Noop ->
             ( model, Cmd.none )

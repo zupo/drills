@@ -1,4 +1,11 @@
-module Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg(..), ToBackend(..), ToFrontend(..))
+module Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg, ToBackend, ToFrontend(..))
+
+import Bridge
+import Main as ElmLand
+
+
+type alias FrontendModel =
+    ElmLand.Model
 
 
 type alias BackendModel =
@@ -6,17 +13,12 @@ type alias BackendModel =
     }
 
 
-type alias FrontendModel =
-    { message : String
-    }
+type alias FrontendMsg =
+    ElmLand.Msg
 
 
-type FrontendMsg
-    = NoOpFrontendMsg
-
-
-type ToBackend
-    = NoOpToBackend
+type alias ToBackend =
+    Bridge.ToBackend
 
 
 type BackendMsg

@@ -2,9 +2,10 @@ module Frontend exposing (Model, app)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
-import Html
+import Json.Encode
 import Lamdera
-import Types exposing (FrontendModel, FrontendMsg(..), ToFrontend(..))
+import Main as ElmLand
+import Types exposing (FrontendModel, FrontendMsg, ToFrontend(..))
 import Url
 
 
@@ -23,30 +24,14 @@ app :
     }
 app =
     Lamdera.frontend
-        { init = \_ _ -> init
-        , update = update
+        { init = ElmLand.init Json.Encode.null
+        , onUrlRequest = ElmLand.UrlRequested
+        , onUrlChange = ElmLand.UrlChanged
+        , update = ElmLand.update
         , updateFromBackend = updateFromBackend
-        , view =
-            \_ ->
-                { title = "Lamdera"
-                , body = [ Html.text "Hello, World!" ]
-                }
-        , subscriptions = \_ -> Sub.none
-        , onUrlChange = \_ -> NoOpFrontendMsg
-        , onUrlRequest = \_ -> NoOpFrontendMsg
+        , subscriptions = ElmLand.subscriptions
+        , view = ElmLand.view
         }
-
-
-init : ( Model, Cmd FrontendMsg )
-init =
-    ( { message = "foo" }, Cmd.none )
-
-
-update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
-update msg model =
-    case msg of
-        NoOpFrontendMsg ->
-            ( model, Cmd.none )
 
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )

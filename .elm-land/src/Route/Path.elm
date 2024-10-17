@@ -7,7 +7,8 @@ import Url.Parser exposing ((</>))
 
 
 type Path
-    = NotFound_
+    = Home_
+    | NotFound_
 
 
 fromUrl : Url -> Path
@@ -26,6 +27,9 @@ fromString urlPath =
                 |> List.filter (String.trim >> String.isEmpty >> Basics.not)
     in
     case urlPathSegments of
+        [] ->
+            Just Home_
+
         _ ->
             Nothing
 
@@ -41,6 +45,9 @@ toString path =
         pieces : List String
         pieces =
             case path of
+                Home_ ->
+                    []
+
                 NotFound_ ->
                     [ "404" ]
     in
