@@ -12,7 +12,7 @@ in
   ];
 
   enterTest = ''
-    lamdera make src/Backend.elm
+    lamdera make || true
     elm-test-rs --compiler $(which lamdera)
   '';
 

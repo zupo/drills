@@ -46,60 +46,31 @@ jobs:
       - name: Run tests and linters
         run: devenv test
 
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 18
-
-      # - name: Install Lamdera
-      #   env:
-      #     LAMDERA_TOKEN: ${{ secrets.LAMDERA_TOKEN }}
-      #   # yamllint disable rule:line-length
-      #   run: |
-      #     curl https://static.lamdera.com/bin/lamdera-1.2.1-linux-x86_64 -o /usr/local/bin/lamdera
-      #     chmod a+x /usr/local/bin/lamdera
-      #     mkdir ~/.ssh && ssh-keyscan apps.lamdera.com >> ~/.ssh/known_hosts
-      #     git remote add lamdera git@apps.lamdera.com:spellings.git
-      #     mkdir -p ~/.elm && echo -n "$LAMDERA_TOKEN">> ~/.elm/.lamdera-cli
-      #   # yamllint enable rule:line-length
-
       # - name: Build CSS
       #   run: |
       #     npm install
       #     npm run build:css
 
-      # - name: Run linters and formatters
-      #   run: |
-      #     pip install pre-commit pre-commit-hooks
-      #     npm install -g elm-format
-      #     npm install -g elm-review
-      #     pre-commit run --all-files
-      #     elm-review --compiler "$(which lamdera)"
+      - name: Check for uncommitted-changes
+        uses: teamniteo/gha-actions/uncommitted-changes@main
 
-      # - name: Run tests
-      #   run: |
-      #     lamdera make || true
-      #     npx elm-test-rs --compiler "$(which lamdera)"
+      - name: Install SSH key for deployment
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: "already added in Install Lamdera step"
 
-      # - name: Check for uncommitted-changes
-      #   uses: teamniteo/gha-actions/uncommitted-changes@main
+      - name: Deploy
+        run: |
+          yes | lamdera deploy
 
-      # - name: Install SSH key for deployment
-      #   uses: shimataro/ssh-key-action@v2
-      #   with:
-      #     key: ${{ secrets.SSH_KEY }}
-      #     known_hosts: "already added in Install Lamdera step"
-
-      # - name: Deploy
-      #   run: |
-      #     yes | lamdera deploy
-
-      # # On `main`, `lamdera deploy` will run `lamdera check` automatically.
-      # # However, not on branches, so we need to run it manually. But `lamdera check`
-      # # expects to be run from `main` or `master` branch, so we need to trick it.
-      # # Since this repo uses `main`, we can checkout from current branch into
-      # # `master` and master will get all changes from the current branch.
-      # - name: Lamdera check
-      #   if: github.event_name == 'pull_request'
-      #   run: |
-      #     git checkout -b master
-      #     lamdera check
+      # On `main`, `lamdera deploy` will run `lamdera check` automatically.
+      # However, not on branches, so we need to run it manually. But `lamdera check`
+      # expects to be run from `main` or `master` branch, so we need to trick it.
+      # Since this repo uses `main`, we can checkout from current branch into
+      # `master` and master will get all changes from the current branch.
+      - name: Lamdera check
+        if: github.event_name == 'pull_request'
+        run: |
+          git checkout -b master
+          lamdera check
