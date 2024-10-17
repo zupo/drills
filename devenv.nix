@@ -10,6 +10,7 @@ in
     pkgs.which
     pkgs.git
     pkgs-unstable.elmPackages.lamdera
+    pkgs.elmPackages.elm-land
     pkgs-unstable.elmPackages.elm-test-rs
     pkgs.nodejs
   ];
@@ -25,18 +26,26 @@ in
     typos.enable = true;
     deadnix.enable = true;
     detect-private-keys.enable = true;
-    elm-format.enable = true;
-    elm-review.enable = true;
-    end-of-file-fixer.enable = true;
     html-tidy.enable = true;
     ripsecrets.enable = true;
+
     trim-trailing-whitespace.enable = true;
+    trim-trailing-whitespace.excludes = [".elm-land/"];
+
+    end-of-file-fixer.enable = true;
+    end-of-file-fixer.excludes = [".elm-land/"];
 
     shellcheck.enable = true;
     shellcheck.excludes = [".yml" ".yaml"];
 
     denofmt.enable = true;
-    denofmt.excludes = ["elm.json" "review/elm.json"];
+    denofmt.excludes = ["elm.json" "review/elm.json" "elm-land.json" ".elm-land/"];
+
+    # elm-format.enable = true;
+    # elm-format.excludes = [".elm-land/"];
+
+    # elm-review.enable = true;
+    # elm-review.excludes = [".elm-land/"];
   };
 
   enterTest = ''
