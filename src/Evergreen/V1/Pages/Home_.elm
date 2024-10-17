@@ -1,4 +1,4 @@
-module Evergreen.V1.Pages.Home_ exposing (..)
+module Evergreen.V1.Pages.Home_ exposing (Model, Msg(..))
 
 
 type alias Model =

@@ -1,4 +1,4 @@
-module Evergreen.V1.Main.Layouts.Model exposing (..)
+module Evergreen.V1.Main.Layouts.Model exposing (Model)
 
 
 type alias Model =

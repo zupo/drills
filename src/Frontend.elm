@@ -1,17 +1,10 @@
-module Frontend exposing (..)
+module Frontend exposing (Model, app)
 
-import Browser exposing (UrlRequest(..))
+import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import Html
-import Html.Attributes as Attr
-import Json.Encode
 import Lamdera
-import Main as ElmLand
-import Pages.Home_
-import Shared.Msg
-import Task
-import Time
-import Types exposing (..)
+import Types exposing (FrontendModel, FrontendMsg(..), ToFrontend(..))
 import Url
 
 
@@ -19,25 +12,45 @@ type alias Model =
     FrontendModel
 
 
+app :
+    { init : Lamdera.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
+    , view : Model -> Browser.Document FrontendMsg
+    , update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
+    , updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
+    , subscriptions : Model -> Sub FrontendMsg
+    , onUrlRequest : UrlRequest -> FrontendMsg
+    , onUrlChange : Url.Url -> FrontendMsg
+    }
 app =
     Lamdera.frontend
-        { init = ElmLand.init Json.Encode.null
-        , onUrlRequest = ElmLand.UrlRequested
-        , onUrlChange = ElmLand.UrlChanged
-        , update = ElmLand.update
+        { init = \_ _ -> init
+        , update = update
         , updateFromBackend = updateFromBackend
-        , subscriptions = ElmLand.subscriptions
-        , view = ElmLand.view
+        , view =
+            \_ ->
+                { title = "Lamdera"
+                , body = [ Html.text "Hello, World!" ]
+                }
+        , subscriptions = \_ -> Sub.none
+        , onUrlChange = \_ -> NoOpFrontendMsg
+        , onUrlRequest = \_ -> NoOpFrontendMsg
         }
+
+
+init : ( Model, Cmd FrontendMsg )
+init =
+    ( { message = "foo" }, Cmd.none )
+
+
+update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
+update msg model =
+    case msg of
+        NoOpFrontendMsg ->
+            ( model, Cmd.none )
 
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
 updateFromBackend msg model =
     case msg of
-        NewSmashedLikes smashedLikes ->
-            ( model, sendSharedMsg <| Shared.Msg.GotNewSmashedLikes smashedLikes )
-
-
-sendSharedMsg : Shared.Msg.Msg -> Cmd FrontendMsg
-sendSharedMsg msg =
-    Time.now |> Task.perform (always (ElmLand.Shared msg))
+        NoOpToFrontend ->
+            ( model, Cmd.none )

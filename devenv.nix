@@ -41,11 +41,11 @@ in
     denofmt.enable = true;
     denofmt.excludes = ["elm.json" "review/elm.json" "elm-land.json" ".elm-land/"];
 
-    # elm-format.enable = true;
-    # elm-format.excludes = [".elm-land/"];
+    elm-format.enable = true;
+    elm-format.excludes = [".elm-land/" "src/Evergreen"];
 
-    # elm-review.enable = true;
-    # elm-review.excludes = [".elm-land/"];
+    elm-review.enable = true;
+    elm-review.excludes = [".elm-land/"];
   };
 
   enterTest = ''
@@ -53,4 +53,6 @@ in
     elm-test-rs --compiler $(which lamdera)
   '';
 
+  scripts.lint.exec = "pre-commit run --all-files";
+  scripts.test.exec = "elm-test-rs --compiler $(which lamdera)";
 }

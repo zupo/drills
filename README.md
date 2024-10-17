@@ -38,3 +38,7 @@ https://spellings-<BRANCH_NAME>.lamdera.app/.
 ### Something is wrong with commands in `package.json` and I need to run them manually
 
 You may need to prepend them with `npx`. For example, `npx elm make`.
+
+### Help with Lamdera types
+
+https://github.com/jmpavlick/segakcap

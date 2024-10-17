@@ -1,44 +1,42 @@
-module Backend exposing (..)
+module Backend exposing (Model, app)
 
-import Bridge exposing (..)
-import Html
 import Lamdera exposing (ClientId, SessionId)
-import Types exposing (BackendModel, BackendMsg(..), ToFrontend(..))
+import Types exposing (BackendModel, BackendMsg(..), ToBackend(..))
 
 
 type alias Model =
     BackendModel
 
 
+app :
+    { init : ( Model, Cmd BackendMsg )
+    , update : BackendMsg -> Model -> ( Model, Cmd BackendMsg )
+    , updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
+    , subscriptions : Model -> Sub BackendMsg
+    }
 app =
     Lamdera.backend
         { init = init
         , update = update
         , updateFromFrontend = updateFromFrontend
-        , subscriptions = \m -> Lamdera.onConnect OnConnect
+        , subscriptions = \_ -> Sub.none
         }
 
 
 init : ( Model, Cmd BackendMsg )
 init =
-    ( { smashedLikes = 0 }
-    , Cmd.none
-    )
+    ( { message = "foo" }, Cmd.none )
 
 
 update : BackendMsg -> Model -> ( Model, Cmd BackendMsg )
 update msg model =
     case msg of
-        OnConnect sid cid ->
-            ( model, Lamdera.sendToFrontend cid <| NewSmashedLikes model.smashedLikes )
+        NoOpBackendMsg ->
+            ( model, Cmd.none )
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
-updateFromFrontend sessionId clientId msg model =
+updateFromFrontend _ _ msg model =
     case msg of
-        SmashedLikeButton ->
-            let
-                newSmashedLikes =
-                    model.smashedLikes + 1
-            in
-            ( { model | smashedLikes = newSmashedLikes }, Lamdera.broadcast <| NewSmashedLikes newSmashedLikes )
+        NoOpToBackend ->
+            ( model, Cmd.none )

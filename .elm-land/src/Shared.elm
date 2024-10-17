@@ -43,7 +43,7 @@ type alias Model =
 
 init : Result Json.Decode.Error Flags -> Route () -> ( Model, Effect Msg )
 init flagsResult route =
-    ( { smashedLikes = 0 }
+    ( {}
     , Effect.none
     )
 
@@ -59,8 +59,8 @@ type alias Msg =
 update : Route () -> Msg -> Model -> ( Model, Effect Msg )
 update route msg model =
     case msg of
-        Shared.Msg.GotNewSmashedLikes count ->
-            ( { model | smashedLikes = count }
+        Shared.Msg.NoOp ->
+            ( model
             , Effect.none
             )
 

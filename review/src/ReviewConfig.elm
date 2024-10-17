@@ -22,8 +22,6 @@ import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
 import NoPrematureLetComputation
 import NoSimpleLetBody
-import NoUnused.CustomTypeConstructorArgs
-import NoUnused.CustomTypeConstructors
 import NoUnused.Dependencies
 import NoUnused.Exports
 import NoUnused.Parameters
@@ -37,22 +35,33 @@ config : List Rule
 config =
     [ Docs.ReviewAtDocs.rule
     , NoConfusingPrefixOperator.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoDebug.Log.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoExposingEverything.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoImportingEverything.rule []
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoMissingTypeAnnotation.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoMissingTypeAnnotationInLetIn.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoMissingTypeExpose.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoSimpleLetBody.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoPrematureLetComputation.rule
-    , NoUnused.CustomTypeConstructors.rule []
-    , NoUnused.CustomTypeConstructorArgs.rule
-    , NoUnused.Dependencies.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoUnused.Exports.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoUnused.Parameters.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoUnused.Patterns.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , NoUnused.Variables.rule
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     , Simplify.rule Simplify.defaults
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
     ]
