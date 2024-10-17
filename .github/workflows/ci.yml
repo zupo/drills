@@ -62,7 +62,13 @@ jobs:
 
       - name: Deploy
         shell: devenv shell bash -- -e {0}
-        run: yes | lamdera deploy
+        env:
+          LAMDERA_TOKEN: ${{ secrets.LAMDERA_TOKEN }}
+        run: |
+          mkdir -p ~/.ssh && ssh-keyscan apps.lamdera.com >> ~/.ssh/known_hosts
+          git remote add lamdera git@apps.lamdera.com:spellings.git
+          mkdir -p ~/.elm && echo -n $LAMDERA_TOKEN >> ~/.elm/.lamdera-cli
+          yes | lamdera deploy
 
       # On `main`, `lamdera deploy` will run `lamdera check` automatically.
       # However, not on branches, so we need to run it manually. But `lamdera check`
