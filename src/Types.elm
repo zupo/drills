@@ -9,7 +9,7 @@ type alias FrontendModel =
 
 
 type alias BackendModel =
-    { message : String
+    { smashedLikes : Int
     }
 
 
@@ -26,4 +26,4 @@ type BackendMsg
 
 
 type ToFrontend
-    = NoOpToFrontend
+    = NewSmashedLikes Int

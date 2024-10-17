@@ -2,7 +2,7 @@ module Backend exposing (Model, app)
 
 import Bridge exposing (ToBackend(..))
 import Lamdera exposing (ClientId, SessionId)
-import Types exposing (BackendModel, BackendMsg(..))
+import Types exposing (BackendModel, BackendMsg(..), ToFrontend(..))
 
 
 type alias Model =
@@ -26,7 +26,7 @@ app =
 
 init : ( Model, Cmd BackendMsg )
 init =
-    ( { message = "foo" }, Cmd.none )
+    ( { smashedLikes = 0 }, Cmd.none )
 
 
 update : BackendMsg -> Model -> ( Model, Cmd BackendMsg )
@@ -39,5 +39,10 @@ update msg model =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend _ _ msg model =
     case msg of
-        Noop ->
-            ( model, Cmd.none )
+        SmashedLikeButton ->
+            let
+                newSmashedLikes : Int
+                newSmashedLikes =
+                    model.smashedLikes + 1
+            in
+            ( { model | smashedLikes = newSmashedLikes }, Lamdera.broadcast <| NewSmashedLikes newSmashedLikes )
