@@ -1,8 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let
+  pkgs-unstable = import inputs.nixpkgs-unstable { system = pkgs.stdenv.system; };
+in
 {
   packages = [
     pkgs.elmPackages.lamdera
+    pkgs-unstable.elmPackages.elm-test-rs
     pkgs.nodejs
   ];
 
@@ -34,7 +38,7 @@
   };
 
   enterTest = ''
-    npx elm-test-rs --compiler $(which lamdera)
+    elm-test-rs --compiler $(which lamdera)
   '';
 
 }
