@@ -12,6 +12,7 @@ in
   ];
 
   enterTest = ''
+    lamdera make src/Backend.elm
     elm-test-rs --compiler $(which lamdera)
   '';
 
