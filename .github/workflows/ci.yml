@@ -19,7 +19,6 @@ on:
 jobs:
   CI:
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}

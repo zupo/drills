@@ -38,7 +38,7 @@ in
   };
 
   enterTest = ''
-    npx elm-test-rs --compiler $(which lamdera)
+    elm-test-rs --compiler $(which lamdera)
   '';
 
 }
