@@ -61,8 +61,8 @@ jobs:
           known_hosts: "already added in Install Lamdera step"
 
       - name: Deploy
-        run: |
-          yes | lamdera deploy
+        shell: devenv shell bash -- -e {0}
+        run: yes | lamdera deploy
 
       # On `main`, `lamdera deploy` will run `lamdera check` automatically.
       # However, not on branches, so we need to run it manually. But `lamdera check`
@@ -71,6 +71,7 @@ jobs:
       # `master` and master will get all changes from the current branch.
       - name: Lamdera check
         if: github.event_name == 'pull_request'
+        shell: devenv shell bash -- -e {0}
         run: |
           git checkout -b master
           lamdera check
