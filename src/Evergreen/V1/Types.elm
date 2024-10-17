@@ -1,31 +1,30 @@
-module Evergreen.V1.Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg(..), ToBackend(..), ToFrontend(..))
+module Evergreen.V1.Types exposing (..)
 
-import Browser
-import Browser.Navigation
+import Evergreen.V1.Bridge
+import Evergreen.V1.Main
+import Lamdera
 
 
 type alias FrontendModel =
-    { key : Browser.Navigation.Key
-    , title : String
-    }
+    Evergreen.V1.Main.Model
 
 
 type alias BackendModel =
-    { title : String
+    { smashedLikes : Int
     }
 
 
-type FrontendMsg
-    = UrlClicked Browser.UrlRequest
+type alias FrontendMsg =
+    Evergreen.V1.Main.Msg
 
 
-type ToBackend
-    = NoOpToBackend
+type alias ToBackend =
+    Evergreen.V1.Bridge.ToBackend
 
 
 type BackendMsg
-    = NoOpBackendMsg
+    = OnConnect Lamdera.SessionId Lamdera.ClientId
 
 
 type ToFrontend
-    = NoOpToFrontend
+    = NewSmashedLikes Int

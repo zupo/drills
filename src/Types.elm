@@ -1,34 +1,33 @@
-module Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg(..), ToBackend(..), ToFrontend(..))
+module Types exposing (..)
 
+import Bridge
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
+import Lamdera exposing (ClientId, SessionId)
+import Main as ElmLand
 import Url exposing (Url)
 
 
 type alias FrontendModel =
-    { key : Key
-    , title : String
-    }
+    ElmLand.Model
 
 
 type alias BackendModel =
-    { title : String
+    { smashedLikes : Int
     }
 
 
-type FrontendMsg
-    = UrlClicked UrlRequest
-    | UrlChanged Url
-    | NoOpFrontendMsg
+type alias FrontendMsg =
+    ElmLand.Msg
 
 
-type ToBackend
-    = NoOpToBackend
+type alias ToBackend =
+    Bridge.ToBackend
 
 
 type BackendMsg
-    = NoOpBackendMsg
+    = OnConnect SessionId ClientId
 
 
 type ToFrontend
-    = NoOpToFrontend
+    = NewSmashedLikes Int
