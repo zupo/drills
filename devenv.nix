@@ -5,6 +5,7 @@ let
 in
 {
   packages = [
+    pkgs.git
     pkgs.elmPackages.lamdera
     pkgs-unstable.elmPackages.elm-test-rs
     pkgs.nodejs
@@ -38,7 +39,7 @@ in
   };
 
   enterTest = ''
-    elm-test-rs --compiler $(which lamdera)
+    elm-test-rs
   '';
 
 }
