@@ -13,6 +13,7 @@ in
     pkgs.elmPackages.elm-land
     pkgs-unstable.elmPackages.elm-test-rs
     pkgs.nodejs
+    pkgs.tailwindcss
   ];
 
   pre-commit.hooks = {
@@ -26,7 +27,6 @@ in
     typos.enable = true;
     deadnix.enable = true;
     detect-private-keys.enable = true;
-    html-tidy.enable = true;
     ripsecrets.enable = true;
 
     trim-trailing-whitespace.enable = true;
@@ -54,7 +54,6 @@ in
   '';
 
 
-  # processes .elm-land.exec = lib.mkIf (!config.devenv.isTesting) "elm-land server";
   processes =
     if !config.devenv.isTesting
     then

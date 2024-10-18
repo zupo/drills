@@ -2,8 +2,8 @@ module Pages.Home_ exposing (Model, Msg(..), page)
 
 import Bridge
 import Effect exposing (Effect)
-import Html exposing (div, h1, img, node, p, text)
-import Html.Attributes exposing (alt, src, style)
+import Html exposing (div, h1, img, node, p, span, text)
+import Html.Attributes exposing (alt, class, src, style)
 import Html.Events exposing (onClick)
 import Lamdera
 import Page exposing (Page)
@@ -115,7 +115,12 @@ view shared _ =
             [ style "font-family" "Nunito Sans"
             , style "opacity" "0.75"
             ]
-            [ text "It's working, Mario!!" ]
+            [ text "It's working, Mario!!"
+            , span
+                [ class "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+                ]
+                [ text "Badge" ]
+            ]
         , p
             [ style "font-family" "Nunito Sans"
             , style "cursor" "pointer"

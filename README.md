@@ -29,6 +29,10 @@ $ open http://localhost:1234
 - Run all checks: `devenv test`
 - Verify deployment: `lamdera check`
 - CI: https://github.com/zupo/drills/actions/workflows/ci.yml
+- Recommended VSCode extensions:
+  - https://marketplace.visualstudio.com/items?itemName=elm-land.elm-land
+    - `"elmLand.compilerFilepath": "lamdera",`
+  - https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
 
 ## Deployment
 
