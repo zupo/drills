@@ -1,4 +1,4 @@
-module Bridge exposing (..)
+module Bridge exposing (ToBackend(..))
 
 
 type ToBackend

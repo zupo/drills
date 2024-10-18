@@ -1,17 +1,14 @@
-module Frontend exposing (..)
+module Frontend exposing (Model, app)
 
-import Browser exposing (UrlRequest(..))
+import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
-import Html
-import Html.Attributes as Attr
 import Json.Encode
 import Lamdera
 import Main as ElmLand
-import Pages.Home_
 import Shared.Msg
 import Task
 import Time
-import Types exposing (..)
+import Types exposing (FrontendModel, FrontendMsg, ToFrontend(..))
 import Url
 
 
@@ -19,6 +16,15 @@ type alias Model =
     FrontendModel
 
 
+app :
+    { init : Lamdera.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
+    , view : Model -> Browser.Document FrontendMsg
+    , update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
+    , updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
+    , subscriptions : Model -> Sub FrontendMsg
+    , onUrlRequest : UrlRequest -> FrontendMsg
+    , onUrlChange : Url.Url -> FrontendMsg
+    }
 app =
     Lamdera.frontend
         { init = ElmLand.init Json.Encode.null

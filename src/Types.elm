@@ -1,11 +1,8 @@
-module Types exposing (..)
+module Types exposing (BackendModel, BackendMsg(..), FrontendModel, FrontendMsg, ToBackend, ToFrontend(..))
 
 import Bridge
-import Browser exposing (UrlRequest)
-import Browser.Navigation exposing (Key)
 import Lamdera exposing (ClientId, SessionId)
 import Main as ElmLand
-import Url exposing (Url)
 
 
 type alias FrontendModel =

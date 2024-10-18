@@ -15,7 +15,6 @@ module Shared exposing
 import Effect exposing (Effect)
 import Json.Decode
 import Route exposing (Route)
-import Route.Path
 import Shared.Model
 import Shared.Msg
 
@@ -42,7 +41,7 @@ type alias Model =
 
 
 init : Result Json.Decode.Error Flags -> Route () -> ( Model, Effect Msg )
-init flagsResult route =
+init _ _ =
     ( { smashedLikes = 0 }
     , Effect.none
     )
@@ -57,7 +56,7 @@ type alias Msg =
 
 
 update : Route () -> Msg -> Model -> ( Model, Effect Msg )
-update route msg model =
+update _ msg model =
     case msg of
         Shared.Msg.GotNewSmashedLikes count ->
             ( { model | smashedLikes = count }
@@ -70,5 +69,5 @@ update route msg model =
 
 
 subscriptions : Route () -> Model -> Sub Msg
-subscriptions route model =
+subscriptions _ _ =
     Sub.none

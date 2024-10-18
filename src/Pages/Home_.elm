@@ -1,9 +1,9 @@
 module Pages.Home_ exposing (Model, Msg(..), page)
 
 import Bridge
-import Effect exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Effect exposing (Effect)
+import Html exposing (div, h1, img, node, p, text)
+import Html.Attributes exposing (alt, src, style)
 import Html.Events exposing (onClick)
 import Lamdera
 import Page exposing (Page)
@@ -13,7 +13,7 @@ import View exposing (View)
 
 
 page : Shared.Model -> Route () -> Page Model Msg
-page shared route =
+page shared _ =
     Page.new
         { init = init
         , update = update
@@ -59,7 +59,7 @@ update msg model =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.none
 
 
@@ -68,31 +68,31 @@ subscriptions model =
 
 
 view : Shared.Model -> Model -> View Msg
-view shared model =
+view shared _ =
     { title = "Elm Land ❤️ Lamdera"
     , body =
         [ node "style" [] [ text """
-            @import url('https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Nunito+Sans&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Nunito+Sans&display=swap');
 
-            html {
-                height: 100%;
-                color: white;
-                background: linear-gradient(dodgerblue, #339);
-            }
-            body {
-                display: flex;
-                flex-direction: column;
-                margin: 0;
-                justify-content: center;
-                align-items: center;
-                height: 90vh;
-                font-family: 'Lora';
-            }
-            h1 {
-                margin: 0;
-                font-weight: 600 !important;
-            }
-            """ ]
+                html {
+                    height: 100%;
+                    color: white;
+                    background: linear-gradient(dodgerblue, #339);
+                }
+                body {
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0;
+                    justify-content: center;
+                    align-items: center;
+                    height: 90vh;
+                    font-family: 'Lora';
+                }
+                h1 {
+                    margin: 0;
+                    font-weight: 600 !important;
+                }
+                """ ]
         , div [ style "display" "flex", style "gap" "1rem" ]
             [ img
                 [ alt "Lando, the Elm Land Rainbow"

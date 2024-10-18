@@ -1,12 +1,13 @@
-# spellings
+# Drills
 
-A simple Elm app I built to help my kids train word spellings for school.
+A simple Elm app I built to help my kids do homework drills for school.
 
 Inspirations:
 
 - https://github.com/lamdera/example-apps/
 - https://github.com/supermario/lamdera-realworld/
 - https://github.com/tristanpendergrass/shipgame/
+- https://github.com/kraklin/elm-land-lamdera-auth-tailwind-template
 
 # Develop
 
@@ -15,26 +16,29 @@ Inspirations:
 You need [devenv](https://devenv.sh/) and [direnv](https://direnv.net/).
 
 ```console
-$ cd spellings
-$ lamdera live
+$ cd drills
+$ devenv up
+$ open http://localhost:1234
 ```
 
 ## Tooling
 
-- Auto-reload CSS changes: `npm run build:css -- --watch`
+- TODO: Auto-reload CSS changes: `npm run build:css -- --watch`
+- Run unit tests: `test`
+- Run linters: `lint`
+- Run all checks: `devenv test`
 - Verify deployment: `lamdera check`
-- Run tests & linters: `devenv test`
-- CI: https://github.com/zupo/spellings/actions/workflows/ci.yml
+- CI: https://github.com/zupo/drills/actions/workflows/ci.yml
 
 ## Deployment
 
-Each commit to `main` is auto-deployed to https://spellings.lamdera.app/.
+Each commit to `main` is auto-deployed to https://drills.lamdera.app/.
 
 Each Pull Request gets a preview app at
-https://spellings-<BRANCH_NAME>.lamdera.app/.
+https://drills-<BRANCH_NAME>.lamdera.app/.
 
 ## Troubleshooting
 
-### Something is wrong with commands in `package.json` and I need to run them manually
+### Help with Lamdera types
 
-You may need to prepend them with `npx`. For example, `npx elm make`.
+https://github.com/jmpavlick/segakcap

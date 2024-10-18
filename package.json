@@ -1,5 +1,5 @@
 {
-  "name": "spellings",
+  "name": "drills",
   "scripts": {
     "build:css": "npx tailwindcss -i ./src/input.css -o ./public/output.css"
   },
