@@ -2,13 +2,14 @@ module Pages.Home_ exposing (Model, Msg(..), page)
 
 import Bridge
 import Effect exposing (Effect)
-import Html exposing (div, h1, img, node, p, span, text)
-import Html.Attributes exposing (alt, class, src, style)
-import Html.Events exposing (onClick)
+import Html.Styled exposing (div, h1, img, p, text)
+import Html.Styled.Attributes exposing (alt, css, src, style)
+import Html.Styled.Events exposing (onClick)
 import Lamdera
 import Page exposing (Page)
 import Route exposing (Route)
 import Shared
+import Tailwind.Utilities as Tw
 import View exposing (View)
 
 
@@ -71,63 +72,56 @@ view : Shared.Model -> Model -> View Msg
 view shared _ =
     { title = "Elm Land ❤️ Lamdera"
     , body =
-        [ node "style" [] [ text """
-                @import url('https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Nunito+Sans&display=swap');
-
-                html {
-                    height: 100%;
-                    color: white;
-                    background: linear-gradient(dodgerblue, #339);
-                }
-                body {
-                    display: flex;
-                    flex-direction: column;
-                    margin: 0;
-                    justify-content: center;
-                    align-items: center;
-                    height: 90vh;
-                    font-family: 'Lora';
-                }
-                h1 {
-                    margin: 0;
-                    font-weight: 600 !important;
-                }
-                """ ]
-        , div [ style "display" "flex", style "gap" "1rem" ]
+        [ div
+            [ css
+                [ Tw.flex
+                , Tw.gap_4
+                ]
+            ]
             [ img
                 [ alt "Lando, the Elm Land Rainbow"
                 , src "https://elm.land/images/logo-480.png"
-                , style "width" "128px"
-                , style "margin-right" "2.5rem"
+                , css
+                    [ Tw.w_32
+                    , Tw.mr_10
+                    ]
                 ]
                 []
             , img
                 [ alt "Laurie, the Lamdera Lambda Llamba"
                 , src "https://lamdera.com/images/llama/floaty.png"
-                , style "width" "81.4px"
-                , style "margin-right" "1.5rem"
-                , style "height" "108.4px"
+                , css
+                    [ Tw.w_20
+                    , Tw.mr_6
+                    , Tw.h_28
+                    ]
                 ]
                 []
             ]
-        , h1 [] [ text "Elm Land ❤️ Lamdera" ]
-        , p
-            [ style "font-family" "Nunito Sans"
-            , style "opacity" "0.75"
-            ]
-            [ text "It's working, Mario!!"
-            , span
-                [ class "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-s font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+        , h1
+            [ css
+                [ Tw.text_3xl
+                , Tw.font_bold
                 ]
-                [ text "Badge" ]
             ]
+            [ text "Elm Land ❤️ Lamdera" ]
         , p
-            [ style "font-family" "Nunito Sans"
-            , style "cursor" "pointer"
+            [ css
+                [ Tw.font_sans
+                , Tw.opacity_75
+                , Tw.my_5
+                ]
+            ]
+            [ text "It's working, Mario!!" ]
+        , p
+            [ css
+                [ Tw.font_sans
+                , Tw.cursor_pointer
+                , Tw.p_1
+                , Tw.rounded_md
+                , Tw.select_none
+                ]
             , style "background-color" "#ffffff40"
-            , style "padding" "5px"
-            , style "border-radius" "5px"
-            , style "user-select" "none"
             , onClick SmashedLikeButton
             ]
             [ text <| "👍 " ++ String.fromInt shared.smashedLikes ]
