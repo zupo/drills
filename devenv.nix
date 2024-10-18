@@ -59,6 +59,8 @@ in
     then
       {
         elm-land.exec = "elm-land server";
+        lamdera.exec = "lamdera live";
+        tailwind.exec = "tailwindcss -i ./src/style.css -o ./public/style.css --watch";
       }
     else {};
 

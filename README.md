@@ -18,12 +18,11 @@ You need [devenv](https://devenv.sh/) and [direnv](https://direnv.net/).
 ```console
 $ cd drills
 $ devenv up
-$ open http://localhost:1234
+$ open http://localhost:8000
 ```
 
 ## Tooling
 
-- TODO: Auto-reload CSS changes: `npm run build:css -- --watch`
 - Run unit tests: `test`
 - Run linters: `lint`
 - Run all checks: `devenv test`
