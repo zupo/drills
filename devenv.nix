@@ -53,6 +53,9 @@ in
     elm-test-rs --compiler $(which lamdera)
   '';
 
+  processes.lamdera.exec = "lamdera live";
+  processes.elm-land.exec = "elm-land server";
+
   scripts.lint.exec = "pre-commit run --all-files";
   scripts.test.exec = "elm-test-rs --compiler $(which lamdera)";
 }

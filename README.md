@@ -7,6 +7,7 @@ Inspirations:
 - https://github.com/lamdera/example-apps/
 - https://github.com/supermario/lamdera-realworld/
 - https://github.com/tristanpendergrass/shipgame/
+- https://github.com/kraklin/elm-land-lamdera-auth-tailwind-template
 
 # Develop
 
@@ -16,14 +17,17 @@ You need [devenv](https://devenv.sh/) and [direnv](https://direnv.net/).
 
 ```console
 $ cd spellings
-$ lamdera live
+$ devenv up
+$ open http://localhost:8000
 ```
 
 ## Tooling
 
-- Auto-reload CSS changes: `npm run build:css -- --watch`
+- TODO: Auto-reload CSS changes: `npm run build:css -- --watch`
+- Run unit tests: `test`
+- Run linters: `lint`
+- Run all checks: `devenv test`
 - Verify deployment: `lamdera check`
-- Run tests & linters: `devenv test`
 - CI: https://github.com/zupo/spellings/actions/workflows/ci.yml
 
 ## Deployment
@@ -34,10 +38,6 @@ Each Pull Request gets a preview app at
 https://spellings-<BRANCH_NAME>.lamdera.app/.
 
 ## Troubleshooting
-
-### Something is wrong with commands in `package.json` and I need to run them manually
-
-You may need to prepend them with `npx`. For example, `npx elm make`.
 
 ### Help with Lamdera types
 
