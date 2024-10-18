@@ -1,3 +1,6 @@
+-- An override of .elm-land/src/View.elm that adds support for elm-css
+
+
 module View exposing
     ( View, map
     , none, fromString
@@ -13,14 +16,14 @@ module View exposing
 -}
 
 import Browser
-import Html exposing (Html)
+import Html.Styled
 import Route exposing (Route)
 import Shared.Model
 
 
 type alias View msg =
     { title : String
-    , body : List (Html msg)
+    , body : List (Html.Styled.Html msg)
     }
 
 
@@ -35,7 +38,7 @@ toBrowserDocument :
     -> Browser.Document msg
 toBrowserDocument { view } =
     { title = view.title
-    , body = view.body
+    , body = List.map Html.Styled.toUnstyled view.body
     }
 
 
@@ -44,7 +47,7 @@ toBrowserDocument { view } =
 map : (msg1 -> msg2) -> View msg1 -> View msg2
 map fn view =
     { title = view.title
-    , body = List.map (Html.map fn) view.body
+    , body = List.map (Html.Styled.map fn) view.body
     }
 
 
@@ -68,5 +71,5 @@ the new page working in the web browser!
 fromString : String -> View msg
 fromString moduleName =
     { title = moduleName
-    , body = [ Html.text moduleName ]
+    , body = [ Html.Styled.text moduleName ]
     }
