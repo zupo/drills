@@ -1,4 +1,4 @@
-module Evergreen.V1.Main.Pages.Msg exposing (Msg(..))
+module Evergreen.V1.Main.Pages.Msg exposing (..)
 
 import Evergreen.V1.Pages.Home_
 import Evergreen.V1.Pages.NotFound_

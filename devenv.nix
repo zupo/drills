@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, config, inputs, ... }:
 let
   pkgs-unstable = import inputs.nixpkgs-unstable { system = pkgs.stdenv.system; config.allowUnfree = true;  };
 in
@@ -53,8 +53,15 @@ in
     elm-test-rs --compiler $(which lamdera)
   '';
 
-  processes.lamdera.exec = "lamdera live";
-  processes.elm-land.exec = "elm-land server";
+
+  # processes .elm-land.exec = lib.mkIf (!config.devenv.isTesting) "elm-land server";
+  processes =
+    if !config.devenv.isTesting
+    then
+      {
+        elm-land.exec = "elm-land server";
+      }
+    else {};
 
   scripts.lint.exec = "pre-commit run --all-files";
   scripts.test.exec = "elm-test-rs --compiler $(which lamdera)";

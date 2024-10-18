@@ -35,33 +35,33 @@ config : List Rule
 config =
     [ Docs.ReviewAtDocs.rule
     , NoConfusingPrefixOperator.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoDebug.Log.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoExposingEverything.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoImportingEverything.rule []
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoMissingTypeAnnotation.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoMissingTypeAnnotationInLetIn.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoMissingTypeExpose.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoSimpleLetBody.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoPrematureLetComputation.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoUnused.Exports.rule
         |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoUnused.Parameters.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoUnused.Patterns.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , NoUnused.Variables.rule
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     , Simplify.rule Simplify.defaults
-        |> Rule.ignoreErrorsForDirectories [ ".elm-land/" ]
+        |> Rule.ignoreErrorsForDirectories [ ".elm-land/", "src/Evergreen/" ]
     ]

@@ -1,6 +1,6 @@
-# spellings
+# Drills
 
-A simple Elm app I built to help my kids train word spellings for school.
+A simple Elm app I built to help my kids do homework drills for school.
 
 Inspirations:
 
@@ -16,9 +16,9 @@ Inspirations:
 You need [devenv](https://devenv.sh/) and [direnv](https://direnv.net/).
 
 ```console
-$ cd spellings
+$ cd drills
 $ devenv up
-$ open http://localhost:8000
+$ open http://localhost:1234
 ```
 
 ## Tooling
@@ -28,14 +28,14 @@ $ open http://localhost:8000
 - Run linters: `lint`
 - Run all checks: `devenv test`
 - Verify deployment: `lamdera check`
-- CI: https://github.com/zupo/spellings/actions/workflows/ci.yml
+- CI: https://github.com/zupo/drills/actions/workflows/ci.yml
 
 ## Deployment
 
-Each commit to `main` is auto-deployed to https://spellings.lamdera.app/.
+Each commit to `main` is auto-deployed to https://drills.lamdera.app/.
 
 Each Pull Request gets a preview app at
-https://spellings-<BRANCH_NAME>.lamdera.app/.
+https://drills-<BRANCH_NAME>.lamdera.app/.
 
 ## Troubleshooting
 

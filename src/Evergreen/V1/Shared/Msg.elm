@@ -1,4 +1,4 @@
-module Evergreen.V1.Shared.Msg exposing (Msg(..))
+module Evergreen.V1.Shared.Msg exposing (..)
 
 
 type Msg

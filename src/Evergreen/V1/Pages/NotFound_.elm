@@ -1,4 +1,4 @@
-module Evergreen.V1.Pages.NotFound_ exposing (Model, Msg(..))
+module Evergreen.V1.Pages.NotFound_ exposing (..)
 
 
 type alias Model =

@@ -73,7 +73,7 @@ jobs:
           LAMDERA_TOKEN: ${{ secrets.LAMDERA_TOKEN }}
         run: |
           mkdir -p ~/.ssh && ssh-keyscan apps.lamdera.com >> ~/.ssh/known_hosts
-          git remote add lamdera git@apps.lamdera.com:spellings.git
+          git remote add lamdera git@apps.lamdera.com:drills.git
           mkdir -p ~/.elm && echo -n $LAMDERA_TOKEN >> ~/.elm/.lamdera-cli
           yes | lamdera deploy
 

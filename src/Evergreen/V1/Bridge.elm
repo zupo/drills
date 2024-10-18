@@ -1,4 +1,4 @@
-module Evergreen.V1.Bridge exposing (ToBackend(..))
+module Evergreen.V1.Bridge exposing (..)
 
 
 type ToBackend

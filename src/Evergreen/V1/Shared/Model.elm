@@ -1,4 +1,4 @@
-module Evergreen.V1.Shared.Model exposing (Model)
+module Evergreen.V1.Shared.Model exposing (..)
 
 
 type alias Model =

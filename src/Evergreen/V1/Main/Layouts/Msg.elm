@@ -1,4 +1,4 @@
-module Evergreen.V1.Main.Layouts.Msg exposing (Msg)
+module Evergreen.V1.Main.Layouts.Msg exposing (..)
 
 
 type alias Msg =

@@ -1,4 +1,4 @@
-module Evergreen.V1.Main exposing (Model, Msg(..))
+module Evergreen.V1.Main exposing (..)
 
 import Browser
 import Browser.Navigation
