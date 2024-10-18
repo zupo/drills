@@ -1,14 +1,16 @@
 module Pages.Home_ exposing (Model, Msg(..), page)
 
 import Bridge
+import Css
 import Effect exposing (Effect)
-import Html.Styled exposing (div, h1, img, p, text)
-import Html.Styled.Attributes exposing (alt, css, src, style)
-import Html.Styled.Events exposing (onClick)
+import Html.Styled exposing (a, button, div, h2, span, text)
+import Html.Styled.Attributes exposing (css, href)
 import Lamdera
 import Page exposing (Page)
 import Route exposing (Route)
 import Shared
+import Tailwind.Breakpoints exposing (sm)
+import Tailwind.Theme as Theme
 import Tailwind.Utilities as Tw
 import View exposing (View)
 
@@ -69,61 +71,47 @@ subscriptions _ =
 
 
 view : Shared.Model -> Model -> View Msg
-view shared _ =
-    { title = "Elm Land ❤️ Lamdera"
+view _ _ =
+    { title = "Choose a Drill"
     , body =
         [ div
             [ css
                 [ Tw.flex
-                , Tw.gap_4
+                , Tw.flex_col
+                , Tw.h_screen
+                , Tw.justify_center
+                , Tw.items_center
                 ]
             ]
-            [ img
-                [ alt "Lando, the Elm Land Rainbow"
-                , src "https://elm.land/images/logo-480.png"
-                , css
-                    [ Tw.w_32
-                    , Tw.mr_10
+            [ h2
+                [ css
+                    [ Tw.text_3xl
+                    , Tw.font_bold
+                    , Tw.tracking_tight
+                    , Tw.text_color Theme.gray_900
+                    , Tw.text_center
+                    , sm [ Tw.text_4xl ]
                     ]
                 ]
-                []
-            , img
-                [ alt "Laurie, the Lamdera Lambda Llamba"
-                , src "https://lamdera.com/images/llama/floaty.png"
-                , css
-                    [ Tw.w_20
-                    , Tw.mr_6
-                    , Tw.h_28
+                [ span [ css [ Tw.block ] ] [ text "Ready to practice spellings?" ]
+                , span [ css [ Tw.block ] ] [ text "Press start!" ]
+                ]
+            , div [ css [ Tw.mt_8, Tw.flex, Tw.justify_center ] ]
+                [ div [ css [ Tw.inline_flex, Tw.rounded_md, Tw.shadow ] ]
+                    [ a
+                        [ href "/spelling"
+                        , css
+                            [ Tw.rounded_md
+                            , Tw.bg_color Theme.indigo_600
+                            , Tw.text_base
+                            , Tw.font_medium
+                            , Tw.text_color Theme.white
+                            , Css.hover [ Tw.bg_color Theme.indigo_700 ]
+                            ]
+                        ]
+                        [ button [ css [ Tw.px_5, Tw.py_3 ] ] [ text "Start" ] ]
                     ]
                 ]
-                []
             ]
-        , h1
-            [ css
-                [ Tw.text_3xl
-                , Tw.font_bold
-                ]
-            ]
-            [ text "Elm Land ❤️ Lamdera" ]
-        , p
-            [ css
-                [ Tw.font_sans
-                , Tw.opacity_75
-                , Tw.my_5
-                ]
-            ]
-            [ text "It's working, Mario!!" ]
-        , p
-            [ css
-                [ Tw.font_sans
-                , Tw.cursor_pointer
-                , Tw.p_1
-                , Tw.rounded_md
-                , Tw.select_none
-                ]
-            , style "background-color" "#ffffff40"
-            , onClick SmashedLikeButton
-            ]
-            [ text <| "👍 " ++ String.fromInt shared.smashedLikes ]
         ]
     }
