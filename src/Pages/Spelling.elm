@@ -28,7 +28,7 @@ type alias Model =
 init : () -> ( Model, Effect Msg )
 init () =
     ( {}
-    , Effect.none
+    , Effect.say "This is a test"
     )
 
 
