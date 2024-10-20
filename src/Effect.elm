@@ -1,6 +1,6 @@
 port module Effect exposing
     ( Effect
-    , none
+    , none, batch
     , sendCmd
     , pushRoute, replaceRoute
     , map, toCmd
@@ -11,7 +11,7 @@ port module Effect exposing
 
 @docs Effect
 
-@docs none
+@docs none, batch
 @docs sendCmd
 
 @docs pushRoute, replaceRoute
@@ -59,6 +59,13 @@ none =
     None
 
 
+{-| Send multiple effects at once.
+-}
+batch : List (Effect msg) -> Effect msg
+batch =
+    Batch
+
+
 {-| Send a normal `Cmd msg` as an effect, something like `Http.get` or `Random.generate`.
 -}
 sendCmd : Cmd msg -> Effect msg
@@ -99,7 +106,7 @@ replaceRoute route =
 -- PORTS
 
 
-port sayy : String -> Cmd msg
+port text_to_speech : String -> Cmd msg
 
 
 say : String -> Effect msg
@@ -141,8 +148,8 @@ map fn effect =
         SendSharedMsg sharedMsg ->
             SendSharedMsg sharedMsg
 
-        Say str ->
-            Say str
+        Say text ->
+            Say text
 
 
 {-| Elm Land depends on this function to perform your effects.
@@ -184,5 +191,5 @@ toCmd options effect =
             Task.succeed sharedMsg
                 |> Task.perform options.fromSharedMsg
 
-        Say str ->
-            sayy str
+        Say text ->
+            text_to_speech text
