@@ -45,3 +45,10 @@ https://drills-<BRANCH_NAME>.lamdera.app/.
 ### Help with Lamdera types
 
 https://github.com/jmpavlick/segakcap
+
+TODO:
+
+- drills refactor
+- random word
+- timekeeping
+- publish template
