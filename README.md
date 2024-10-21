@@ -42,13 +42,25 @@ https://drills-<BRANCH_NAME>.lamdera.app/.
 
 ## Troubleshooting
 
+### Creating Evergreen Migrations
+
+Sometimes your PR's CI will fail with `UNIMPLEMENTED MIGRATION` error in the
+`Lamdera Check` step. This means that you need to create a new migration for the
+changes you've made:
+
+```bash
+$ git branch -D master
+$ git checkout -b master
+$ lamdera check
+```
+
+More info on https://dashboard.lamdera.app/docs/evergreen.
+
 ### Help with Lamdera types
 
 https://github.com/jmpavlick/segakcap
 
 TODO:
 
-- drills refactor
-- random word
-- timekeeping
+- randomize word
 - publish template

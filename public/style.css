@@ -720,14 +720,6 @@ select {
   --tw-contain-style:  ;
 }
 
-.visible {
-  visibility: visible;
-}
-
-.invisible {
-  visibility: hidden;
-}
-
 .block {
   display: block;
 }

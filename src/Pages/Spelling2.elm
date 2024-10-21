@@ -15,7 +15,8 @@ import Shared
 import Tailwind.Breakpoints exposing (sm)
 import Tailwind.Theme as Theme
 import Tailwind.Utilities as Tw
-import Task
+import Task exposing (Task)
+import Time exposing (Posix)
 import View exposing (View)
 
 
@@ -92,11 +93,14 @@ type alias Model =
     , expected : Word
     , remaining : List Word
     , gifs_random_index : Int
+    , startTime : Maybe Posix
+    , elapsed : Int
     }
 
 
 type State
     = Playing
+    | Correct
     | Finished
 
 
@@ -107,8 +111,13 @@ init () =
       , expected = Puddle
       , remaining = words.list |> List.map (\( _, word ) -> word) |> List.drop 1
       , gifs_random_index = 0
+      , startTime = Nothing
+      , elapsed = 0
       }
-    , List.length gifs |> oneToX |> Random.generate RandomNumber |> Effect.sendCmd
+    , Effect.batch
+        [ List.length gifs |> oneToX |> Random.generate RandomNumber |> Effect.sendCmd
+        , Task.perform GotStartTime Time.now |> Effect.sendCmd
+        ]
     )
 
 
@@ -123,7 +132,7 @@ nextWord model =
             { model | state = Finished }
 
         x :: xs ->
-            { model | expected = x, remaining = xs, actual = "" }
+            { model | expected = x, remaining = xs, actual = "", state = Playing }
 
 
 type Msg
@@ -132,6 +141,8 @@ type Msg
     | ButtonNext
     | RandomNumber Int
     | Focus (Result Dom.Error ())
+    | GotStartTime Posix
+    | Tick Posix
 
 
 update : Msg -> Model -> ( Model, Effect Msg )
@@ -143,8 +154,33 @@ update msg model =
         Focus _ ->
             ( model, Effect.none )
 
+        GotStartTime time ->
+            ( { model | startTime = Just time }, Effect.none )
+
+        Tick currentTime ->
+            case model.startTime of
+                Just start ->
+                    let
+                        elapsed : Int
+                        elapsed =
+                            Time.posixToMillis currentTime - Time.posixToMillis start
+                    in
+                    ( { model | elapsed = elapsed }, Effect.none )
+
+                Nothing ->
+                    ( model, Effect.none )
+
         KeyInput newContent ->
-            ( { model | actual = newContent |> String.trim }, Effect.none )
+            let
+                actual : String
+                actual =
+                    newContent |> String.trim
+            in
+            if actual == String.toLower (words.toString model.expected) then
+                ( { model | actual = actual, state = Correct }, Effect.none )
+
+            else
+                ( { model | actual = actual }, Effect.none )
 
         ButtonRepeat ->
             ( model, model.expected |> words.toString |> Effect.say )
@@ -152,6 +188,9 @@ update msg model =
         ButtonNext ->
             case model.state of
                 Playing ->
+                    ( model, Effect.none )
+
+                Correct ->
                     let
                         updated_model : Model
                         updated_model =
@@ -161,10 +200,34 @@ update msg model =
                         ( updated_model, Effect.say "Well done!" )
 
                     else
-                        ( updated_model, Effect.batch [ updated_model.expected |> words.toString |> Effect.say, focusElement "actual" ] )
+                        ( updated_model
+                        , Effect.batch
+                            [ updated_model.expected |> words.toString |> Effect.say
+                            , Task.perform GotStartTime (nowPlusElapsed model.elapsed) |> Effect.sendCmd
+                            , focusElement "actual"
+                            ]
+                        )
 
                 Finished ->
                     ( model, Effect.none )
+
+
+nowPlusElapsed : Int -> Task Never Posix
+nowPlusElapsed elapsed =
+    Time.now
+        |> Task.map
+            (\currentTime ->
+                let
+                    currentMillis : Int
+                    currentMillis =
+                        Time.posixToMillis currentTime
+
+                    futureMillis : Int
+                    futureMillis =
+                        currentMillis - elapsed
+                in
+                Time.millisToPosix futureMillis
+            )
 
 
 oneToX : Int -> Random.Generator Int
@@ -182,8 +245,13 @@ focusElement id =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
+subscriptions model =
+    case model.state of
+        Playing ->
+            Time.every 100 Tick
+
+        _ ->
+            Sub.none
 
 
 
@@ -194,7 +262,8 @@ view : Model -> View Msg
 view model =
     { title = "Spellings"
     , body =
-        [ div [ css [ Tw.flex, Tw.flex_col, Tw.h_screen, Tw.justify_center, Tw.items_center ] ] (content model)
+        [ text ("Elapsed time: " ++ (toFloat model.elapsed / 1000 |> round |> String.fromInt) ++ " seconds")
+        , div [ css [ Tw.flex, Tw.flex_col, Tw.h_screen, Tw.justify_center, Tw.items_center ] ] (content model)
         ]
     }
 
@@ -205,21 +274,15 @@ content model =
         Playing ->
             contentPlaying model
 
+        Correct ->
+            contentCorrect model
+
         Finished ->
             contentFinished model
 
 
 contentPlaying : Model -> List (Html Msg)
 contentPlaying model =
-    let
-        visible : Css.Style
-        visible =
-            if String.toLower model.actual == String.toLower (words.toString model.expected) then
-                Tw.visible
-
-            else
-                Tw.invisible
-    in
     [ input
         [ css [ Tw.block, Tw.rounded_full, Tw.border_color Theme.gray_300, Tw.px_4, Tw.shadow_sm, focus [ Tw.border_color Theme.indigo_500, Tw.ring_color Theme.indigo_500 ], sm [ Tw.text_sm ] ]
         , type_ "text"
@@ -230,14 +293,17 @@ contentPlaying model =
         ]
         []
     , button [ css [ Tw.py_3 ], onClick ButtonRepeat ] [ text "📢" ]
-    , h2
+    ]
+
+
+contentCorrect : Model -> List (Html Msg)
+contentCorrect model =
+    [ h2
         [ css [ Tw.text_3xl, Tw.font_bold, Tw.tracking_tight, Tw.text_color Theme.gray_900, sm [ Tw.text_4xl, Tw.py_4 ] ]
-        , css [ visible ]
         ]
         [ text "Correct!" ]
     , a
         [ css [ Tw.rounded_md, Tw.border, Tw.border_color Theme.transparent, Tw.bg_color Theme.indigo_600, Tw.text_base, Tw.font_medium, Tw.text_color Theme.white, hover [ Tw.bg_color Theme.indigo_700 ] ]
-        , css [ visible ]
         , href "#"
         ]
         [ button
@@ -249,7 +315,6 @@ contentPlaying model =
     , img
         [ src ("https://cataas.com/cat/says/" ++ words.toString model.expected |> String.toLower)
         , css [ Tw.py_4, Tw.h_1over2 ]
-        , css [ visible ]
         ]
         []
     ]
@@ -261,6 +326,7 @@ contentFinished model =
         [ span [ class "block" ]
             [ text "Finished!" ]
         ]
+    , span [] [ text ("It took you " ++ (toFloat model.elapsed / 1000 |> round |> String.fromInt) ++ " seconds") ]
     , img
         [ Array.fromList gifs |> Array.get model.gifs_random_index |> Maybe.withDefault "" |> src
         , css [ Tw.py_4, Tw.h_1over2 ]
