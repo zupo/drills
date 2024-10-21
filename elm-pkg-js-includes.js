@@ -2,7 +2,7 @@
 // For now, its presence will mean Lamdera detects the extra JS and packages
 // In future this will be more structured + restricted once the design is done
 
-const say = require("./elm-pkg-js/text_to_speech");
+const say = require("./elm-pkg-js/text_to_speech.js");
 
 exports.init = async function init(app) {
   // @WARNING: this only runs for Lamdera production deploys!
