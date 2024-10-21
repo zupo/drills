@@ -147,7 +147,12 @@ update msg model =
             ( { model | actual = newContent |> String.trim }, Effect.none )
 
         ButtonRepeat ->
-            ( model, model.expected |> words.toString |> Effect.say )
+            ( model
+            , Effect.batch
+                [ model.expected |> words.toString |> Effect.say
+                , focusElement "actual"
+                ]
+            )
 
         ButtonNext ->
             case model.state of
