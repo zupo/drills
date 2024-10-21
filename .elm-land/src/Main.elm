@@ -16,6 +16,7 @@ import Main.Pages.Msg
 import Page
 import Pages.Home_
 import Pages.Spelling
+import Pages.Spelling2
 import Pages.NotFound_
 import Pages.NotFound_
 import Route exposing (Route)
@@ -111,6 +112,23 @@ initPageAndLayout model =
                 Tuple.mapBoth
                     Main.Pages.Model.Spelling
                     (Effect.map Main.Pages.Msg.Spelling >> fromPageEffect model)
+                    ( pageModel, pageEffect )
+            , layout = Nothing
+            }
+
+        Route.Path.Spelling2 ->
+            let
+                page : Page.Page Pages.Spelling2.Model Pages.Spelling2.Msg
+                page =
+                    Pages.Spelling2.page model.shared (Route.fromUrl () model.url)
+
+                ( pageModel, pageEffect ) =
+                    Page.init page ()
+            in
+            { page = 
+                Tuple.mapBoth
+                    Main.Pages.Model.Spelling2
+                    (Effect.map Main.Pages.Msg.Spelling2 >> fromPageEffect model)
                     ( pageModel, pageEffect )
             , layout = Nothing
             }
@@ -350,6 +368,12 @@ updateFromPage msg model =
                 (Effect.map Main.Pages.Msg.Spelling >> fromPageEffect model)
                 (Page.update (Pages.Spelling.page model.shared (Route.fromUrl () model.url)) pageMsg pageModel)
 
+        ( Main.Pages.Msg.Spelling2 pageMsg, Main.Pages.Model.Spelling2 pageModel ) ->
+            Tuple.mapBoth
+                Main.Pages.Model.Spelling2
+                (Effect.map Main.Pages.Msg.Spelling2 >> fromPageEffect model)
+                (Page.update (Pages.Spelling2.page model.shared (Route.fromUrl () model.url)) pageMsg pageModel)
+
         ( Main.Pages.Msg.NotFound_ pageMsg, Main.Pages.Model.NotFound_ pageModel ) ->
             Tuple.mapBoth
                 Main.Pages.Model.NotFound_
@@ -390,6 +414,12 @@ toLayoutFromPage model =
                 |> Pages.Spelling.page model.shared
                 |> Page.layout pageModel
                 |> Maybe.map (Layouts.map (Main.Pages.Msg.Spelling >> Page))
+
+        Main.Pages.Model.Spelling2 pageModel ->
+            Route.fromUrl () model.url
+                |> Pages.Spelling2.page model.shared
+                |> Page.layout pageModel
+                |> Maybe.map (Layouts.map (Main.Pages.Msg.Spelling2 >> Page))
 
         Main.Pages.Model.NotFound_ pageModel ->
             Route.fromUrl () model.url
@@ -450,6 +480,11 @@ subscriptions model =
                 Main.Pages.Model.Spelling pageModel ->
                     Page.subscriptions (Pages.Spelling.page model.shared (Route.fromUrl () model.url)) pageModel
                         |> Sub.map Main.Pages.Msg.Spelling
+                        |> Sub.map Page
+
+                Main.Pages.Model.Spelling2 pageModel ->
+                    Page.subscriptions (Pages.Spelling2.page model.shared (Route.fromUrl () model.url)) pageModel
+                        |> Sub.map Main.Pages.Msg.Spelling2
                         |> Sub.map Page
 
                 Main.Pages.Model.NotFound_ pageModel ->
@@ -519,6 +554,11 @@ viewPage model =
         Main.Pages.Model.Spelling pageModel ->
             Page.view (Pages.Spelling.page model.shared (Route.fromUrl () model.url)) pageModel
                 |> View.map Main.Pages.Msg.Spelling
+                |> View.map Page
+
+        Main.Pages.Model.Spelling2 pageModel ->
+            Page.view (Pages.Spelling2.page model.shared (Route.fromUrl () model.url)) pageModel
+                |> View.map Main.Pages.Msg.Spelling2
                 |> View.map Page
 
         Main.Pages.Model.NotFound_ pageModel ->
@@ -602,6 +642,12 @@ toPageUrlHookCmd model routes =
                 |> List.map Page
                 |> toCommands
 
+        Main.Pages.Model.Spelling2 pageModel ->
+            Page.toUrlMessages routes (Pages.Spelling2.page model.shared (Route.fromUrl () model.url)) 
+                |> List.map Main.Pages.Msg.Spelling2
+                |> List.map Page
+                |> toCommands
+
         Main.Pages.Model.NotFound_ pageModel ->
             Page.toUrlMessages routes (Pages.NotFound_.page model.shared (Route.fromUrl () model.url)) 
                 |> List.map Main.Pages.Msg.NotFound_
@@ -662,6 +708,9 @@ isAuthProtected routePath =
             False
 
         Route.Path.Spelling ->
+            False
+
+        Route.Path.Spelling2 ->
             False
 
         Route.Path.NotFound_ ->
