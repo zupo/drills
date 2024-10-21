@@ -1,0 +1,269 @@
+module Pages.Spelling exposing (Model, Msg, State, Word, page)
+
+import Array
+import Browser.Dom as Dom
+import Css exposing (focus, hover)
+import Effect exposing (Effect)
+import Enum exposing (Enum)
+import Html.Styled exposing (Html, a, button, div, h2, img, input, span, text)
+import Html.Styled.Attributes exposing (class, css, href, id, placeholder, src, type_, value)
+import Html.Styled.Events exposing (onClick, onInput)
+import Page exposing (Page)
+import Random
+import Route exposing (Route)
+import Shared
+import Tailwind.Breakpoints exposing (sm)
+import Tailwind.Theme as Theme
+import Tailwind.Utilities as Tw
+import Task
+import View exposing (View)
+
+
+page : Shared.Model -> Route () -> Page Model Msg
+page _ _ =
+    Page.new
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        }
+
+
+type Word
+    = Short
+    | Born
+    | Horse
+    | More
+    | Before
+    | Morning
+    | Score
+    | Door
+    | Wore
+    | Shore
+
+
+words : Enum Word
+words =
+    Enum.create
+        [ ( "Short", Short )
+        , ( "Born", Born )
+        , ( "Horse", Horse )
+        , ( "More", More )
+        , ( "Before", Before )
+        , ( "Morning", Morning )
+        , ( "Score", Score )
+        , ( "Door", Door )
+        , ( "Wore", Wore )
+        , ( "Shore", Shore )
+        ]
+
+
+gifs : List String
+gifs =
+    [ "https://64.media.tumblr.com/dde0fdf5c5109dba56dbeacf2094276e/tumblr_nwbnk7qbGf1rfm34io1_250.gifv"
+    , "https://64.media.tumblr.com/eca79024cec4cc949874bef677c23de8/tumblr_mxbta5zEaa1rg35k5o1_400.gifv"
+    , "https://64.media.tumblr.com/e196446b73231a6a463fde8e4b6a0ac6/tumblr_mwvvibAaZL1slwrsuo1_250.gifv"
+    , "https://media0.giphy.com/media/pxGKhhlMv2Awg/giphy.gif?cid=790b761183f42390c7d7e30d5a9b347678b01db9190b18ac&rid=giphy.gif&ct=g"
+    , "https://64.media.tumblr.com/7c3f783885aa929972f37dc92b4787a8/tumblr_mylv6yuJ6n1ra8x2co1_400.gifv"
+    , "https://media1.giphy.com/media/1HKaikaFqDt7i/giphy.gif?cid=790b761112f03b66b3d07105db0e4727e470dee50fa24104&rid=giphy.gif&ct=g"
+    , "https://media4.giphy.com/media/12c7MQi3q492Hm/giphy.gif?cid=790b7611fad4b59bd7be72ed4f6451e95c4b28be52144363&rid=giphy.gif&ct=g"
+    , "https://media3.giphy.com/media/mM08Ca5WLdJw4/giphy.gif?cid=790b7611d83b826b5378c55df4974a9c19869081e25fbecc&rid=giphy.gif&ct=g"
+    , "https://media0.giphy.com/media/100MY9QRHJe9DG/giphy.gif?cid=790b7611c681db7ea34b7fb7ebb89cfa3a2ccf6d34ee08c8&rid=giphy.gif&ct=g"
+    , "https://media0.giphy.com/media/JhUZYdpnqrgcM/giphy.gif?cid=790b761193bb4a6655e2bf1328a61570790970242369a44c&rid=giphy.gif&ct=g"
+    , "https://media0.giphy.com/media/XNdoIMwndQfqE/giphy.gif?cid=790b7611782871e02d96a8d81cb891f43dfe2dca1b676a7a&rid=giphy.gif&ct=g"
+    , "https://media2.giphy.com/media/13tks6KkV5Crzq/giphy.gif?cid=790b761102a45c5029bc331ab8abe863f51c0aaac63f17f4&rid=giphy.gif&ct=g"
+    , "https://media2.giphy.com/media/ioYrOflf6vfXO/giphy.gif?cid=790b7611879c54f4760b50aeb7394879b1c3b2afea948845&rid=giphy.gif&ct=g"
+    , "https://media3.giphy.com/media/Y260AqiEPWewE/giphy.gif?cid=790b7611d7d7f42740e997572ffd0d09e6d4a482177afbe6&rid=giphy.gif&ct=g"
+    , "https://media0.giphy.com/media/XVHVUJm4ElVbq/giphy.gif?cid=790b761193c3e001acb1cf6fa8293a542a01617eaa05a576&rid=giphy.gif&ct=g"
+    , "https://media1.giphy.com/media/W2FXGIVejFptc6CSxY/giphy.gif?cid=790b7611ff953c275e24a4b78cc3bc794f0ed616a5ea4290&rid=giphy.gif&ct=g"
+    , "https://media3.giphy.com/media/jgM9t6pPY0www/giphy.gif?cid=790b7611dd2900d4ff6cea3445011b1f8ecd6b3686aceec2&rid=giphy.gif&ct=g"
+    , "https://media1.giphy.com/media/tBxyh2hbwMiqc/giphy.gif?cid=790b7611133255dea7a82693869aadb1e15280dbbb65d7cc&rid=giphy.gif&ct=g"
+    , "https://media4.giphy.com/media/WPWrU2AeK3aV2/giphy.gif?cid=790b7611c0fa24dcedd86f62c741bda2be35c765800e68c7&rid=giphy.gif&ct=g"
+    ]
+
+
+
+-- INIT
+
+
+type alias Model =
+    { state : State
+    , actual : String
+    , expected : Word
+    , remaining : List Word
+    , gifs_random_index : Int
+    }
+
+
+type State
+    = Playing
+    | Finished
+
+
+init : () -> ( Model, Effect Msg )
+init () =
+    ( { state = Playing
+      , actual = ""
+      , expected = Short
+      , remaining = words.list |> List.map (\( _, word ) -> word) |> List.drop 1
+      , gifs_random_index = 0
+      }
+    , List.length gifs |> oneToX |> Random.generate RandomNumber |> Effect.sendCmd
+    )
+
+
+
+-- UPDATE
+
+
+nextWord : Model -> Model
+nextWord model =
+    case model.remaining of
+        [] ->
+            { model | state = Finished }
+
+        x :: xs ->
+            { model | expected = x, remaining = xs, actual = "" }
+
+
+type Msg
+    = KeyInput String
+    | ButtonRepeat
+    | ButtonNext
+    | RandomNumber Int
+    | Focus (Result Dom.Error ())
+
+
+update : Msg -> Model -> ( Model, Effect Msg )
+update msg model =
+    case msg of
+        RandomNumber x ->
+            ( { model | gifs_random_index = x - 1 }, Effect.batch [ model.expected |> words.toString |> Effect.say, focusElement "actual" ] )
+
+        Focus _ ->
+            ( model, Effect.none )
+
+        KeyInput newContent ->
+            ( { model | actual = newContent |> String.trim }, Effect.none )
+
+        ButtonRepeat ->
+            ( model, model.expected |> words.toString |> Effect.say )
+
+        ButtonNext ->
+            case model.state of
+                Playing ->
+                    let
+                        updated_model : Model
+                        updated_model =
+                            nextWord model
+                    in
+                    if updated_model.state == Finished then
+                        ( updated_model, Effect.say "Well done!" )
+
+                    else
+                        ( updated_model, Effect.batch [ updated_model.expected |> words.toString |> Effect.say, focusElement "actual" ] )
+
+                Finished ->
+                    ( model, Effect.none )
+
+
+oneToX : Int -> Random.Generator Int
+oneToX x =
+    Random.int 1 x
+
+
+focusElement : String -> Effect Msg
+focusElement id =
+    Dom.focus id |> Task.attempt Focus |> Effect.sendCmd
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
+
+-- VIEW
+
+
+view : Model -> View Msg
+view model =
+    { title = "Spellings"
+    , body =
+        [ div [ css [ Tw.flex, Tw.flex_col, Tw.h_screen, Tw.justify_center, Tw.items_center ] ] (content model)
+        ]
+    }
+
+
+content : Model -> List (Html Msg)
+content model =
+    case model.state of
+        Playing ->
+            contentPlaying model
+
+        Finished ->
+            contentFinished model
+
+
+contentPlaying : Model -> List (Html Msg)
+contentPlaying model =
+    let
+        visible : Css.Style
+        visible =
+            if String.toLower model.actual == String.toLower (words.toString model.expected) then
+                Tw.visible
+
+            else
+                Tw.invisible
+    in
+    [ input
+        [ css [ Tw.block, Tw.rounded_full, Tw.border_color Theme.gray_300, Tw.px_4, Tw.shadow_sm, focus [ Tw.border_color Theme.indigo_500, Tw.ring_color Theme.indigo_500 ], sm [ Tw.text_sm ] ]
+        , type_ "text"
+        , id "actual"
+        , placeholder "start typing"
+        , value model.actual
+        , onInput KeyInput
+        ]
+        []
+    , button [ css [ Tw.py_3 ], onClick ButtonRepeat ] [ text "📢" ]
+    , h2
+        [ css [ Tw.text_3xl, Tw.font_bold, Tw.tracking_tight, Tw.text_color Theme.gray_900, sm [ Tw.text_4xl, Tw.py_4 ] ]
+        , css [ visible ]
+        ]
+        [ text "Correct!" ]
+    , a
+        [ css [ Tw.rounded_md, Tw.border, Tw.border_color Theme.transparent, Tw.bg_color Theme.indigo_600, Tw.text_base, Tw.font_medium, Tw.text_color Theme.white, hover [ Tw.bg_color Theme.indigo_700 ] ]
+        , css [ visible ]
+        , href "#"
+        ]
+        [ button
+            [ onClick ButtonNext
+            , css [ Tw.px_5, Tw.py_1 ]
+            ]
+            [ text "Next word" ]
+        ]
+    , img
+        [ src ("https://cataas.com/cat/says/" ++ words.toString model.expected |> String.toLower)
+        , css [ Tw.py_4, Tw.h_1over2 ]
+        , css [ visible ]
+        ]
+        []
+    ]
+
+
+contentFinished : Model -> List (Html Msg)
+contentFinished model =
+    [ h2 [ css [ Tw.text_3xl, Tw.font_bold, Tw.tracking_tight, Tw.text_color Theme.gray_900, sm [ Tw.text_4xl ] ] ]
+        [ span [ class "block" ]
+            [ text "Finished!" ]
+        ]
+    , img
+        [ Array.fromList gifs |> Array.get model.gifs_random_index |> Maybe.withDefault "" |> src
+        , css [ Tw.py_4, Tw.h_1over2 ]
+        ]
+        []
+    ]
