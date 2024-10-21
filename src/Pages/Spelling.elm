@@ -4,7 +4,6 @@ import Array
 import Browser.Dom as Dom
 import Css exposing (focus, hover)
 import Effect exposing (Effect)
-import Enum exposing (Enum)
 import Html.Styled exposing (Html, a, button, div, h2, img, input, span, text)
 import Html.Styled.Attributes exposing (class, css, href, id, placeholder, src, type_, value)
 import Html.Styled.Events exposing (onClick, onInput)
@@ -30,33 +29,23 @@ page _ _ =
         }
 
 
-type Word
-    = Ring
-    | Sang
-    | Wing
-    | King
-    | Going
-    | Bring
-    | Strong
-    | Wrong
-    | Thing
-    | Spring
+type alias Word =
+    String
 
 
-words : Enum Word
+words : List Word
 words =
-    Enum.create
-        [ ( "Ring", Ring )
-        , ( "Sang", Sang )
-        , ( "Wing", Wing )
-        , ( "King", King )
-        , ( "Going", Going )
-        , ( "Bring", Bring )
-        , ( "Strong", Strong )
-        , ( "Wrong", Wrong )
-        , ( "Thing", Thing )
-        , ( "Spring", Spring )
-        ]
+    [ "Ring"
+    , "Sang"
+    , "Wing"
+    , "King"
+    , "Going"
+    , "Bring"
+    , "Strong"
+    , "Wrong"
+    , "Thing"
+    , "Spring"
+    ]
 
 
 gifs : List String
@@ -108,8 +97,8 @@ init : () -> ( Model, Effect Msg )
 init () =
     ( { state = Playing
       , actual = ""
-      , expected = Ring
-      , remaining = words.list |> List.map (\( _, word ) -> word) |> List.drop 1
+      , expected = List.head words |> Maybe.withDefault ""
+      , remaining = List.tail words |> Maybe.withDefault []
       , gifs_random_index = 0
       , startTime = Nothing
       , elapsed = 0
@@ -149,7 +138,7 @@ update : Msg -> Model -> ( Model, Effect Msg )
 update msg model =
     case msg of
         RandomNumber x ->
-            ( { model | gifs_random_index = x - 1 }, Effect.batch [ model.expected |> words.toString |> Effect.say, focusElement "actual" ] )
+            ( { model | gifs_random_index = x - 1 }, Effect.batch [ model.expected |> Effect.say, focusElement "actual" ] )
 
         Focus _ ->
             ( model, Effect.none )
@@ -176,7 +165,7 @@ update msg model =
                 actual =
                     newContent |> String.trim
             in
-            if actual == String.toLower (words.toString model.expected) then
+            if actual == (model.expected |> String.toLower) then
                 ( { model | actual = actual, state = Correct }, Effect.none )
 
             else
@@ -185,7 +174,7 @@ update msg model =
         ButtonRepeat ->
             ( model
             , Effect.batch
-                [ model.expected |> words.toString |> Effect.say
+                [ model.expected |> Effect.say
                 , focusElement "actual"
                 ]
             )
@@ -207,7 +196,7 @@ update msg model =
                     else
                         ( updated_model
                         , Effect.batch
-                            [ updated_model.expected |> words.toString |> Effect.say
+                            [ updated_model.expected |> Effect.say
                             , Task.perform GotStartTime (nowPlusElapsed model.elapsed) |> Effect.sendCmd
                             , focusElement "actual"
                             ]
@@ -318,7 +307,7 @@ contentCorrect model =
             [ text "Next word" ]
         ]
     , img
-        [ src ("https://cataas.com/cat/says/" ++ words.toString model.expected |> String.toLower)
+        [ src ("https://cataas.com/cat/says/" ++ model.expected |> String.toLower)
         , css [ Tw.py_4, Tw.h_1over2 ]
         ]
         []
