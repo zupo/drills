@@ -16,6 +16,7 @@
             "elm/random": "1.0.0",
             "elm/time": "1.0.0",
             "elm/url": "1.0.0",
+            "elm-community/string-extra": "4.0.1",
             "lamdera/codecs": "1.0.0",
             "lamdera/core": "1.0.0",
             "matheus23/elm-default-tailwind-modules": "4.0.1",
@@ -24,6 +25,7 @@
         "indirect": {
             "elm/file": "1.0.5",
             "elm/http": "2.0.0",
+            "elm/regex": "1.0.0",
             "elm/virtual-dom": "1.0.3",
             "matheus23/elm-tailwind-modules-base": "1.0.0",
             "robinheghan/murmur3": "1.0.0",

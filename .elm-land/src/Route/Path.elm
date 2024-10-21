@@ -9,7 +9,6 @@ import Url.Parser exposing ((</>))
 type Path
     = Home_
     | Spelling
-    | Spelling2
     | NotFound_
 
 
@@ -35,9 +34,6 @@ fromString urlPath =
         "spelling" :: [] ->
             Just Spelling
 
-        "spelling2" :: [] ->
-            Just Spelling2
-
         _ ->
             Nothing
 
@@ -58,9 +54,6 @@ toString path =
 
                 Spelling ->
                     [ "spelling" ]
-
-                Spelling2 ->
-                    [ "spelling2" ]
 
                 NotFound_ ->
                     [ "404" ]
