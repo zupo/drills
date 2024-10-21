@@ -1,4 +1,4 @@
-module Pages.Spelling exposing (Model, Msg, State, Word, page)
+module Pages.Spelling2 exposing (Model, Msg, State, Word, page)
 
 import Array
 import Browser.Dom as Dom
@@ -30,31 +30,31 @@ page _ _ =
 
 
 type Word
-    = Ring
-    | Sang
-    | Wing
-    | King
-    | Going
-    | Bring
-    | Strong
-    | Wrong
-    | Thing
-    | Spring
+    = Puddle
+    | Ocean
+    | Planet
+    | Pond
+    | Space
+    | Stone
+    | Fog
+    | Foggy
+    | Storm
+    | Arid
 
 
 words : Enum Word
 words =
     Enum.create
-        [ ( "Ring", Ring )
-        , ( "Sang", Sang )
-        , ( "Wing", Wing )
-        , ( "King", King )
-        , ( "Going", Going )
-        , ( "Bring", Bring )
-        , ( "Strong", Strong )
-        , ( "Wrong", Wrong )
-        , ( "Thing", Thing )
-        , ( "Spring", Spring )
+        [ ( "Puddle", Puddle )
+        , ( "Ocean", Ocean )
+        , ( "Planet", Planet )
+        , ( "Pond", Pond )
+        , ( "Space", Space )
+        , ( "Stone", Stone )
+        , ( "Fog", Fog )
+        , ( "Foggy", Foggy )
+        , ( "Storm", Storm )
+        , ( "Arid", Arid )
         ]
 
 
@@ -104,7 +104,7 @@ init : () -> ( Model, Effect Msg )
 init () =
     ( { state = Playing
       , actual = ""
-      , expected = Ring
+      , expected = Puddle
       , remaining = words.list |> List.map (\( _, word ) -> word) |> List.drop 1
       , gifs_random_index = 0
       }

@@ -106,10 +106,24 @@ view _ _ =
                             , Tw.text_base
                             , Tw.font_medium
                             , Tw.text_color Theme.white
+                            , Tw.mx_3
                             , Css.hover [ Tw.bg_color Theme.indigo_700 ]
                             ]
                         ]
-                        [ button [ css [ Tw.px_5, Tw.py_3 ] ] [ text "Start" ] ]
+                        [ button [ css [ Tw.px_5, Tw.py_3 ] ] [ text "[Oskar] Start" ] ]
+                    , a
+                        [ href "/spelling2"
+                        , css
+                            [ Tw.rounded_md
+                            , Tw.bg_color Theme.indigo_600
+                            , Tw.text_base
+                            , Tw.font_medium
+                            , Tw.text_color Theme.white
+                            , Tw.mx_3
+                            , Css.hover [ Tw.bg_color Theme.indigo_700 ]
+                            ]
+                        ]
+                        [ button [ css [ Tw.px_5, Tw.py_3 ] ] [ text "[Rina] Start" ] ]
                     ]
                 ]
             ]
