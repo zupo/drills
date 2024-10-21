@@ -1,62 +1,73 @@
-module Pages.Spelling exposing (Model, Msg, State, Word, page)
+module Pages.Spelling exposing (Model, Msg, Player(..), State, Word, page, playerToString)
 
 import Array
 import Browser.Dom as Dom
+import Browser.Navigation exposing (load)
 import Css exposing (focus, hover)
+import Dict
 import Effect exposing (Effect)
-import Enum exposing (Enum)
 import Html.Styled exposing (Html, a, button, div, h2, img, input, span, text)
 import Html.Styled.Attributes exposing (class, css, href, id, placeholder, src, type_, value)
 import Html.Styled.Events exposing (onClick, onInput)
 import Page exposing (Page)
 import Random
 import Route exposing (Route)
+import Route.Path
 import Shared
 import Tailwind.Breakpoints exposing (sm)
 import Tailwind.Theme as Theme
 import Tailwind.Utilities as Tw
 import Task exposing (Task)
 import Time exposing (Posix)
+import Utils
 import View exposing (View)
 
 
 page : Shared.Model -> Route () -> Page Model Msg
-page _ _ =
+page _ route =
     Page.new
-        { init = init
+        { init = init route
         , update = update
         , subscriptions = subscriptions
         , view = view
         }
 
 
-type Word
-    = Ring
-    | Sang
-    | Wing
-    | King
-    | Going
-    | Bring
-    | Strong
-    | Wrong
-    | Thing
-    | Spring
+type alias Word =
+    String
 
 
-words : Enum Word
-words =
-    Enum.create
-        [ ( "Ring", Ring )
-        , ( "Sang", Sang )
-        , ( "Wing", Wing )
-        , ( "King", King )
-        , ( "Going", Going )
-        , ( "Bring", Bring )
-        , ( "Strong", Strong )
-        , ( "Wrong", Wrong )
-        , ( "Thing", Thing )
-        , ( "Spring", Spring )
-        ]
+words : Maybe Player -> List Word
+words player =
+    case player of
+        Just Rina ->
+            [ "Puddle"
+            , "Ocean"
+            , "Planet"
+            , "Pond"
+            , "Space"
+            , "Stone"
+            , "Fog"
+            , "Foggy"
+            , "Storm"
+            , "Arid"
+            ]
+
+        Just Oskar ->
+            [ "Ring"
+            , "Sang"
+            , "Wing"
+            , "King"
+            , "Going"
+            , "Bring"
+            , "Strong"
+            , "Wrong"
+            , "Thing"
+            , "Spring"
+            ]
+
+        Nothing ->
+            []
 
 
 gifs : List String
@@ -95,6 +106,7 @@ type alias Model =
     , gifs_random_index : Int
     , startTime : Maybe Posix
     , elapsed : Int
+    , player : Maybe Player
     }
 
 
@@ -104,21 +116,77 @@ type State
     | Finished
 
 
-init : () -> ( Model, Effect Msg )
-init () =
+type Player
+    = Rina
+    | Oskar
+
+
+playerToString : Player -> String
+playerToString player =
+    case player of
+        Rina ->
+            "rina"
+
+        Oskar ->
+            "oskar"
+
+
+init : Route () -> () -> ( Model, Effect Msg )
+init route () =
+    let
+        player : Maybe Player
+        player =
+            loadPlayer route
+
+        expected : Word
+        expected =
+            List.head (words player) |> Maybe.withDefault "" |> String.toLower
+
+        remaining : List Word
+        remaining =
+            List.tail (words player) |> Maybe.withDefault []
+
+        effects : List (Effect Msg)
+        effects =
+            if remaining == [] then
+                [ load "/" |> Effect.sendCmd ]
+
+            else
+                [ List.length gifs |> oneToX |> Random.generate RandomNumber |> Effect.sendCmd
+                , Task.perform GotStartTime Time.now |> Effect.sendCmd
+                , expected |> Effect.say
+                , focusElement "actual"
+                ]
+    in
     ( { state = Playing
       , actual = ""
-      , expected = Ring
-      , remaining = words.list |> List.map (\( _, word ) -> word) |> List.drop 1
+      , expected = expected
+      , remaining = remaining
       , gifs_random_index = 0
       , startTime = Nothing
       , elapsed = 0
+      , player = loadPlayer route
       }
-    , Effect.batch
-        [ List.length gifs |> oneToX |> Random.generate RandomNumber |> Effect.sendCmd
-        , Task.perform GotStartTime Time.now |> Effect.sendCmd
-        ]
+    , Effect.batch effects
     )
+
+
+loadPlayer : Route () -> Maybe Player
+loadPlayer route =
+    let
+        player : String
+        player =
+            Dict.get "player" route.query |> Maybe.withDefault "" |> String.toLower
+    in
+    case player of
+        "rina" ->
+            Just Rina
+
+        "oskar" ->
+            Just Oskar
+
+        _ ->
+            Nothing
 
 
 
@@ -132,7 +200,7 @@ nextWord model =
             { model | state = Finished }
 
         x :: xs ->
-            { model | expected = x, remaining = xs, actual = "", state = Playing }
+            { model | expected = x |> String.toLower, remaining = xs, actual = "", state = Playing }
 
 
 type Msg
@@ -149,7 +217,7 @@ update : Msg -> Model -> ( Model, Effect Msg )
 update msg model =
     case msg of
         RandomNumber x ->
-            ( { model | gifs_random_index = x - 1 }, Effect.batch [ model.expected |> words.toString |> Effect.say, focusElement "actual" ] )
+            ( { model | gifs_random_index = x - 1 }, Effect.none )
 
         Focus _ ->
             ( model, Effect.none )
@@ -174,20 +242,17 @@ update msg model =
             let
                 actual : String
                 actual =
-                    newContent |> String.trim
+                    newContent |> String.trim |> String.toLower
             in
-            if actual == String.toLower (words.toString model.expected) then
-                ( { model | actual = actual, state = Correct }, Effect.none )
+            if actual == model.expected then
+                ( { model | actual = actual, state = Correct }, focusElement "next-word" )
 
             else
                 ( { model | actual = actual }, Effect.none )
 
         ButtonRepeat ->
             ( model
-            , Effect.batch
-                [ model.expected |> words.toString |> Effect.say
-                , focusElement "actual"
-                ]
+            , Effect.batch [ model.expected |> Effect.say, focusElement "actual" ]
             )
 
         ButtonNext ->
@@ -207,7 +272,7 @@ update msg model =
                     else
                         ( updated_model
                         , Effect.batch
-                            [ updated_model.expected |> words.toString |> Effect.say
+                            [ updated_model.expected |> Effect.say
                             , Task.perform GotStartTime (nowPlusElapsed model.elapsed) |> Effect.sendCmd
                             , focusElement "actual"
                             ]
@@ -253,7 +318,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.state of
         Playing ->
-            Time.every 100 Tick
+            Time.every 1000 Tick
 
         _ ->
             Sub.none
@@ -309,16 +374,17 @@ contentCorrect model =
         [ text "Correct!" ]
     , a
         [ css [ Tw.rounded_md, Tw.border, Tw.border_color Theme.transparent, Tw.bg_color Theme.indigo_600, Tw.text_base, Tw.font_medium, Tw.text_color Theme.white, hover [ Tw.bg_color Theme.indigo_700 ] ]
-        , href "#"
+        , href ""
         ]
         [ button
             [ onClick ButtonNext
             , css [ Tw.px_5, Tw.py_1 ]
+            , id "next-word"
             ]
             [ text "Next word" ]
         ]
     , img
-        [ src ("https://cataas.com/cat/says/" ++ words.toString model.expected |> String.toLower)
+        [ src ("https://cataas.com/cat/says/" ++ model.expected |> String.toLower)
         , css [ Tw.py_4, Tw.h_1over2 ]
         ]
         []
@@ -337,4 +403,5 @@ contentFinished model =
         , css [ Tw.py_4, Tw.h_1over2 ]
         ]
         []
+    , a [ Utils.href Route.Path.Home_ ] [ text "Back to Start" ]
     ]
