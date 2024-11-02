@@ -91,6 +91,12 @@ gifs =
     , "https://media3.giphy.com/media/jgM9t6pPY0www/giphy.gif?cid=790b7611dd2900d4ff6cea3445011b1f8ecd6b3686aceec2&rid=giphy.gif&ct=g"
     , "https://media1.giphy.com/media/tBxyh2hbwMiqc/giphy.gif?cid=790b7611133255dea7a82693869aadb1e15280dbbb65d7cc&rid=giphy.gif&ct=g"
     , "https://media4.giphy.com/media/WPWrU2AeK3aV2/giphy.gif?cid=790b7611c0fa24dcedd86f62c741bda2be35c765800e68c7&rid=giphy.gif&ct=g"
+    , "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnZzZmVkcndsb3AzMWZkN2pqYmcwd3o0eGh5ampneW5qb3g5YXhoaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ND6xkVPaj8tHO/giphy.webp"
+    , "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3F0dDFzZDY3YmEzaTEwNzlkMXI1eHg3NDl4aGh2bXZxczY1bm5yeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/v6aOjy0Qo1fIA/giphy.webp"
+    , "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWtqY3ozY3RvZjI1NTRvbTE3MmE4dHJreGx2NmhjOWJjbGhlOW5maSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ryPL1D4vq2KS4/giphy.webp"
+    , "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExczhvZ2J5NmFjbmUyaDE0NG5vaTFjOGdraWIzNDh3dHN5ZTF2aHkwZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jTnGaiuxvvDNK/200.webp"
+    , "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHdzMzV2NnhlZ2lxcTQ5cXR5YTg5MTlpcWlmeGt4MnQ5MWdhMmVsNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JIX9t2j0ZTN9S/giphy.webp"
+    , "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHVjOXU2NXdzYnFsdG96MWI0cGpjbG12aG41M3RycHlwaHRjNm1tdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l4KibK3JwaVo0CjDO/giphy.webp"
     ]
 
 
