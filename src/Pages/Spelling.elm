@@ -242,7 +242,7 @@ update msg model =
             let
                 actual : String
                 actual =
-                    newContent |> String.trim |> String.toLower
+                    newContent |> String.trimLeft |> String.toLower
             in
             if actual == model.expected then
                 ( { model | actual = actual, state = Correct }, focusElement "next-word" )
