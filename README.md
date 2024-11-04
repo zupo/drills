@@ -62,5 +62,5 @@ https://github.com/jmpavlick/segakcap
 
 TODO:
 
-- randomize word
-- publish template
+- randomize words
+- leaderboard of best times
