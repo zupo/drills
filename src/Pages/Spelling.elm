@@ -41,29 +41,29 @@ words : Maybe Player -> List Word
 words player =
     case player of
         Just Rina ->
-            [ "job"
-            , "journalist"
-            , "manager"
-            , "mechanic"
-            , "meeting"
-            , "news"
-            , "newspaper"
-            , "office"
-            , "photographer"
-            , "pilot"
+            [ "police officer"
+            , "queen"
+            , "rocket"
+            , "singer"
+            , "waiter"
+            , "waitress"
+            , "librarian"
+            , "cleaner"
+            , "diver"
+            , "babysitter"
             ]
 
         Just Oskar ->
-            [ "sail"
-            , "tail"
-            , "pain"
-            , "paint"
-            , "snail"
-            , "brain"
-            , "explain"
-            , "complain"
-            , "was"
-            , "they"
+            [ "surf"
+            , "burn"
+            , "burger"
+            , "purple"
+            , "nurse"
+            , "picture"
+            , "measure"
+            , "surprise"
+            , "are"
+            , "all"
             ]
 
         Nothing ->
