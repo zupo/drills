@@ -41,29 +41,29 @@ words : Maybe Player -> List Word
 words player =
     case player of
         Just Rina ->
-            [ "police officer"
-            , "queen"
-            , "rocket"
-            , "singer"
-            , "waiter"
-            , "waitress"
-            , "librarian"
-            , "cleaner"
-            , "diver"
-            , "babysitter"
+            [ "card"
+            , "glass"
+            , "gold"
+            , "metal"
+            , "plastic"
+            , "silver"
+            , "wood"
+            , "wool"
+            , "leather"
+            , "fabric"
             ]
 
         Just Oskar ->
-            [ "surf"
-            , "burn"
-            , "burger"
-            , "purple"
-            , "nurse"
-            , "picture"
-            , "measure"
-            , "surprise"
-            , "are"
-            , "all"
+            [ "dear"
+            , "hear"
+            , "beard"
+            , "near"
+            , "year"
+            , "clear"
+            , "fear"
+            , "appear"
+            , "he"
+            , "she"
             ]
 
         Nothing ->
