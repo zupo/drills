@@ -41,29 +41,29 @@ words : Maybe Player -> List Word
 words player =
     case player of
         Just Rina ->
-            [ "card"
-            , "glass"
-            , "gold"
-            , "metal"
-            , "plastic"
-            , "silver"
-            , "wood"
-            , "wool"
-            , "leather"
-            , "fabric"
+            [ "brush"
+            , "comb"
+            , "cooker"
+            , "cushion"
+            , "diary"
+            , "entrance"
+            , "envelope"
+            , "fridge"
+            , "gate"
+            , "key"
             ]
 
         Just Oskar ->
-            [ "dear"
-            , "hear"
-            , "beard"
-            , "near"
-            , "year"
-            , "clear"
-            , "fear"
-            , "appear"
-            , "he"
+            [ "air"
+            , "fair"
+            , "dairy"
+            , "hair"
+            , "pair"
+            , "chair"
+            , "fairy"
+            , "stairs"
             , "she"
+            , "we"
             ]
 
         Nothing ->
